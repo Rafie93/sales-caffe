@@ -21,6 +21,26 @@
 						<div class="col-12 col-lg-12">
 							<div class="card">
 								<div class="card-body">
+                                            <div class="form-group @error('status') has-error @enderror">
+                                        <label class="form-label">Status </label>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status"  @if ($data->status==1)
+                                                checked
+                                            @endif value="1">
+                                            <span class="form-check-label">
+                                            Aktif
+                                            </span>
+                                        </label>
+										<label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status"  @if ($data->gender==0)
+                                                checked
+                                            @endif value="0">
+                                            <span class="form-check-label">
+                                            Tidak Aktif
+                                            </span>
+                                        </label>
+                                    </div>
+                                    
                                     <div class="form-group @error('table_number') has-error @enderror">
                                         <label class="form-label">Table Number or Seat*</label>
 									    <input type="text" class="form-control @error('table_number') has-error @enderror"

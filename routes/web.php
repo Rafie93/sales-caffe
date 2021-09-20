@@ -19,11 +19,14 @@ use App\Http\Controllers\Sistem\SeatController;
 use App\Http\Controllers\Sistem\TaxController;
 use App\Http\Controllers\Sistem\ProfileController;
 use App\Http\Controllers\Sistem\PaymentMethodController;
+use App\Http\Controllers\Sistem\CourierController;
 use App\Http\Controllers\Member\MemberController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Events\EventController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\LoginController;
 
+Route::get('unauthorised',[LoginController::class,'unauthorised'])->name('unauthorised');
 Route::get('/forgot', [ForgotPasswordController::class, 'index'])->name('forgot');
 Route::post('/forgot/check', [ForgotPasswordController::class, 'check'])->name('forgot.check');
 
@@ -154,6 +157,10 @@ Route::post('/tax/store', [TaxController::class, 'store'])->name('tax.store');
 
 Route::get('/paymentmethod', [PaymentMethodController::class, 'index'])->name('paymentmethod');
 Route::post('/paymentmethod/store', [PaymentMethodController::class, 'store'])->name('paymentmethod.store');
+
+Route::get('/courier', [CourierController::class, 'index'])->name('courier');
+Route::post('/courier/store', [CourierController::class, 'store'])->name('courier.store');
+
 
 Route::post('/save-push-notification-token', [HomeController::class, 'savePushNotificationToken'])->name('save-push-notification-token');
 Route::post('/send-push-notification', [HomeController::class, 'sendPushNotification'])->name('send.push-notification');

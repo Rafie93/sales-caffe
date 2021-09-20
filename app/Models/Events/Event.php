@@ -20,9 +20,13 @@ class Event extends Model
         "image",
         "category"
     ];
-     public function image()
+    public function image()
     {
         return $this->image==null ? 'Tidak Ada Image' : asset('/storage/images/event/'.$this->id.'/'.$this->image);
+    }
+      public function stores()
+    {
+        return $this->belongsTo('App\Models\Stores\Store','store_id');
     }
 
 }

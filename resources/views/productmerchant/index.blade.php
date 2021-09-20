@@ -81,9 +81,8 @@
                                         <span class="badge badge-primary">{{$stor->name}}</span>
                                     @endforeach
                                 </td>
-                                <td>{!!$row->DisplayStatus()!!}</td>
                                 <td align="center">{{$row->sales->count()}}</td>
-
+                                <td>{!!$row->DisplayStatus()!!}</td>
                                 <td>
                                     @if ($row->is_ready==0 && $row->status==0)
                                         <a href="{{Route('products.review',$row->code)}}" class="btn btn-primary" rel="noopener noreferrer">Review</a>

@@ -10,6 +10,10 @@ class ProductVariant extends Model
     use HasFactory;
     protected $table = "product_variant";
     protected $fillable = ["store_id","product_id","name","type","options"];
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 
     public function is_type()
     {

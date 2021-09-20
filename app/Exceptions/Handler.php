@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -37,34 +40,35 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if($request->is('api/*')){
+                if ($exception instanceof ValidationException) {
+                    throw new HttpResponseException(
+                        response()->json([
+                            'success' => false,
+                            'message' => __('validation.fails'),
+                            'errors'  => $this->restructureValidationErrors($exception->errors()),
+                        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+                    );
+                }
+                 return parent::render($request, $exception);
+            }
+            
+        });
+         
     }
     
-    // public function render($request, Exception $exception)
-    // {
 
-    //     if($request->is('api/*')){
-    //         if ($exception instanceof ValidationException) {
-    //             throw new HttpResponseException(
-    //                 response()->json([
-    //                     'success' => false,
-    //                     'message' => __('validation.fails'),
-    //                     'errors'  => $this->restructureValidationErrors($exception->errors()),
-    //                 ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-    //             );
-    //         }
-    //     }
-    //     return parent::render($request, $exception);
-
-    // }
-    // private function restructureValidationErrors(array $errors)
-    // {
-    //     $errorList = [];
-    //     foreach ($errors as $attribute => $messages) {
-    //         $errorList[] = [
-    //             'attribute' => $attribute,
-    //             'message'   => $messages[0],
-    //         ];
-    //     }
-    //     return $errorList;
-    // }
+    
+    private function restructureValidationErrors(array $errors)
+    {
+        $errorList = [];
+        foreach ($errors as $attribute => $messages) {
+            $errorList[] = [
+                'attribute' => $attribute,
+                'message'   => $messages[0],
+            ];
+        }
+        return $errorList;
+    }
 }

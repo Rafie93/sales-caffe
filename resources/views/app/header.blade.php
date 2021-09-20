@@ -3,9 +3,9 @@
                         <div class="logo">
                 <a href="index.html">
                     <img id="logoImg" 
-                    src="{{asset('logo/logo.png')}}" 
-                    data-logo_big="{{asset('logo/logo.png')}}"
-                    data-logo_small="{{asset('logo/logoSmall.png')}}"
+                    src="{{asset('logo/logooc.png')}}" 
+                    data-logo_big="{{asset('logo/logooc.png')}}"
+                    data-logo_small="{{asset('logo/logooc.png')}}"
                     alt="OC" />
                 </a>
             </div>

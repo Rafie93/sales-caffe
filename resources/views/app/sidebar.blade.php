@@ -73,6 +73,7 @@
                                  request()->segment(1) == 'seat' ||
                                  request()->segment(1) == 'tax' ||
                                  request()->segment(1) == 'slider' ||
+                                 request()->segment(1) == 'courier' ||
                                  request()->segment(1) == 'paymentmethod' ||
                                  request()->segment(1) == 'regions' ) ? 'active open' : '' }}"><a class="sidebar-sub-toggle"><i class="ti-settings"></i> Master & System <span class="sidebar-collapse-icon ti-angle-down"></span></a>
                             <ul>
@@ -80,6 +81,9 @@
                                 @if (Auth::user()->role==11)
                                     <li class="{{ (request()->segment(1) == 'paymentmethod' ) ? 'active' : '' }}">
                                         <a href="{{Route('paymentmethod')}}"><i class="ti-money"></i> Payment Method</a>
+                                    </li>
+                                     <li class="{{ (request()->segment(1) == 'courier' ) ? 'active' : '' }}">
+                                        <a href="{{Route('courier')}}"><i class="glyphicon glyphicon-plane"></i> Courier</a>
                                     </li>
                                     {{-- <li class="{{ (request()->segment(1) == 'regions' ) ? 'active' : '' }}"><a href="#"><i class="ti-world"></i> Regions</a></li> --}}
                                 @endif

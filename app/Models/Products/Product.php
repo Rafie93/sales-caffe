@@ -37,6 +37,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+     public function stores()
+    {
+        return $this->belongsTo('App\Models\Stores\Store','store_id');
+    }
     public function sales()
     {
         return $this->hasMany('App\Models\Sales\SalesDetail');
@@ -139,7 +143,7 @@ class Product extends Model
 
     public function storeAvailables($code)
     {
-      $storeId =  Product::select('store_id')->where('code',$code)->get()->toArray();
+      $storeId =  Product::select('store_id')->where('type',2)->where('code',$code)->get()->toArray();
       return Store::whereIn('id',$storeId)->get();
     }
 }
