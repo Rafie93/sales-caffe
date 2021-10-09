@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -58,9 +59,13 @@ class LoginController extends Controller
            return response()->json(['success'=>false,'message'=>'Akun tidak ditemukan, silahkan daftar terlebih dulu'], 400);
         }
         $otp = generateOTP();
+        $currentDateTime = Carbon::now();
+        $otpExpired = Carbon::now()->addMinute(2);
+
         $user = $user->first();
         $user->update([
-            'otp' => $otp
+            'otp' => $otp,
+            'otp_expired' => $otpExpired
         ]);
         $message = "JANGAN BERIKAN kode OTP ini ke SIAPAPUN termasuk pihak cs. \nOTP anda: ".$otp;
         nascondimiSendMessage($request->phone,$message);

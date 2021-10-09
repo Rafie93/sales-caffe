@@ -35,9 +35,13 @@
                                     </div>
 
                                        <div class="form-group @error('category') has-error @enderror">
-                                        <label class="form-label">Category / Tag Event</label>
-                                        <input type="text" class="form-control"
-                                        placeholder="" name="category" value="{{old('category')}}">
+                                        <label class="form-label">Category Event</label>
+                                        {{-- <input type="text" class="form-control"
+                                        placeholder="" name="category" value="{{old('category')}}"> --}}
+                                        <select name="category" id="category" class="form-control">
+                                            <option value="Offline">Offline</option>
+                                            <option value="Online">Online</option>
+                                        </select>
                                         @error('category')
                                                 <span class="help-block" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -113,6 +117,40 @@
                                         @enderror
                                     </div>
 
+                                     <div class="form-group @error('kouta') has-error @enderror">
+                                        <label class="form-label">Kouta Event </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="kouta" required value="{{old('kouta') ? old('kouta') : ''}}">
+                                        @error('kouta')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+                                     <div class="form-group @error('min_purchased') has-error @enderror">
+                                        <label class="form-label">Minimal Purchased </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="min_purchased" required value="{{old('min_purchased') ? old('min_purchased') : 1}}">
+                                        @error('min_purchased')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+                                     <div class="form-group @error('max_purchased') has-error @enderror">
+                                        <label class="form-label">Maximal Purchased </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="max_purchased" required value="{{old('max_purchased') ? old('max_purchased') : 5}}">
+                                        @error('max_purchased')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+
                                       <div class="form-group @error('cover') has-error @enderror">
                                         <label class="form-label">Cover </label>
                                         <input type="file" name="cover" class="form-control">
@@ -156,12 +194,12 @@
 @section('script')
 <script>
   CKEDITOR.replace('editor', {
-        height  : '170px',
+        height  : '200px',
         filebrowserUploadUrl: "{{route('product.upload', ['_token' => csrf_token() ])}}",
         filebrowserUploadMethod: 'form'
     });
  CKEDITOR.replace('editor2', {
-        height  : '450px',
+        height  : '200px',
         filebrowserUploadUrl: "{{route('product.upload', ['_token' => csrf_token() ])}}",
         filebrowserUploadMethod: 'form'
     });

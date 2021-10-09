@@ -46,6 +46,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Code</th>
                                 <th>Name</th>
                                 <th class="d-none d-xl-table-cell">Phone</th>
                                 <th class="d-none d-xl-table-cell">Email</th>
@@ -59,6 +60,7 @@
                             @foreach ($users as $key => $row)
                                 <tr>
                                     <td>{{ $users->firstItem() + $key }}</td>
+                                    <td>{{$row->code}}</td>
                                     <td>{{$row->fullname}}</td>
                                     <td>{{$row->phone}}</td>
                                     <td>{{$row->email}}</td>

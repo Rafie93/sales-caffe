@@ -17,7 +17,7 @@ class SeatItem extends JsonResource
           return  [
             'id'      => $this->resource->id,
             'store_id' => $this->resource->store_id,
-            'store_name' => $storeName,
+            'store_name' => $this->resource->store->name,
             'table_number' => $this->resource->table_number,
             'description' => $this->resource->description,
             'sequence' => $this->resource->sequence,

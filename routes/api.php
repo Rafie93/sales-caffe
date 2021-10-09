@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Information\NewsController;
 use App\Http\Controllers\Api\Service\MethodController;
 use App\Http\Controllers\Api\Store\SeatController;
 use App\Http\Controllers\Api\Store\StoreController;
+use App\Http\Controllers\Api\Store\TaxController;
 use App\Http\Controllers\Api\Voucher\VoucherController;
 use App\Http\Controllers\Api\GetIPCityController;
 use App\Http\Controllers\Api\Events\EventController;
@@ -53,6 +54,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::get('voucher', [VoucherController::class,'index']);
         Route::get('stores', [StoreController::class,'index']);
         Route::get('seat/{storeid}', [SeatController::class,'index']);
+        Route::get('tax/{storeid}', [TaxController::class,'index']);
 
         Route::get('event', [EventController::class,'index']);
 

@@ -109,6 +109,17 @@
                 <div class="row">
                         <div class="col-12 col-lg-12">
                             <div class="card">
+
+                                <div class="form-group @error('cover') has-error @enderror">
+                                    <label class="form-label">Cover </label>
+                                    <input type="file" name="cover" class="form-control">
+                                    @error('cover')
+                                            <span class="help-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                    @enderror
+                                </div>
+
                                 <div class="card-body">
                                     <div class="form-group @error('description') has-error @enderror">
                                         <label class="form-label">Deskripsi</label>
@@ -143,7 +154,7 @@
 @section('script')
 <script>
   CKEDITOR.replace('editor', {
-        height  : '490px',
+        height  : '400px',
         filebrowserUploadUrl: "{{route('product.upload', ['_token' => csrf_token() ])}}",
         filebrowserUploadMethod: 'form'
     });

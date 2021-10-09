@@ -20,6 +20,11 @@ class StoreTable extends Model
         'status',
         'image',
     ];
+    public function store()
+    {
+        return $this->belongsTo('App\Models\Stores\Store','store_id');
+    }
+
     public function DisplayReady()
     {
         if ($this->is_ready==1) {

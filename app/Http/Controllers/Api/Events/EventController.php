@@ -14,7 +14,7 @@ class EventController extends Controller
     {
         $events = Event::orderBy('date_end','desc')
                     ->where('date_end','>',Carbon::now())
-                    ->paginate(10);
+                    ->get();
 
         return new ListResource($events);
     }

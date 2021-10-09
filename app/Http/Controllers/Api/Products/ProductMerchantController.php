@@ -35,14 +35,50 @@ class ProductMerchantController extends Controller
         foreach ($products as $key => $row) {
             $available = [];
             $available_display = "";
-            foreach ($row->storeAvailables($row->code) as $key => $store) {
+            foreach ($row->productAvailableStore($row->code) as $key => $store) {
+                $variant = [];
+                foreach ($store->variants as $vari){
+                    $variant[] = array(
+                         'id'      => $vari->id,
+                         'product_id' => $vari->product_id,
+                         'product_name' => $vari->product->name,
+                         'name'      => $vari->name,
+                         'type'      => $vari->type,
+                         'type_display'      => $vari->is_type(),
+                         'options' => json_decode($vari->options)
+                    );
+                }
                $available[] = array(
-                    'store_id' => $store->store_id,
-                    'store_name'=> $store->name
+                'id'      => $store->id,
+                'name' => $store->name,
+                'store_id' => $store->store_id,
+                'store_name' => $store->stores->name,
+                'product_type' => $store->product_type,
+                'code' => $store->code,
+                'description' => $store->description,
+                'category_id' => $store->category_id,
+                'category_name' => $store->category->name,
+                'cost_of_goods' => $store->cost_of_goods,
+                'price_sales' => $store->price_sales,
+                'is_ready' => $store->is_ready,
+                'is_ppn' => $store->is_ppn,
+                'type' => $store->type,
+                'point_cashback' => $store->point_cashback,
+                'time_duration' => $store->time_duration,
+                'is_stock' => $store->is_stock,
+                'long_delivery' => $store->long_delivery,
+                'weight' => $store->weight,
+                'cover' => $store->cover(),
+                'images' => $store->images,
+                'sales' => $store->sales->count(),
+                'rating'  => $store->sales->count(),
+                'variant' => $variant
+                    
                );
                $available_display .= $store->name.' /n';
             }
             $output[] = array(
+                'type' => 'merchant',
                 'name' => $row->name,
                 'code' => $row->code,
                 'description' => $row->description,
@@ -61,12 +97,50 @@ class ProductMerchantController extends Controller
 
         foreach ($productStores as $key => $row) {
             $available = [];
-            $available[] = array(
-                    'store_id' => $row->store_id,
-                    'store_name'=> $row->stores->name
-            );
+            foreach ($row->productFromStore($row->code,$row->name) as $key => $store) {
+                $variant = [];
+                foreach ($store->variants as $vari){
+                    $variant[] = array(
+                         'id'      => $vari->id,
+                         'product_id' => $vari->product_id,
+                         'product_name' => $vari->product->name,
+                         'name'      => $vari->name,
+                         'type'      => $vari->type,
+                         'type_display'      => $vari->is_type(),
+                         'options' => json_decode($vari->options)
+                    );
+                }
+                $available[] = array(
+                    'id'      => $store->id,
+                    'name' => $store->name,
+                    'store_id' => $store->store_id,
+                    'store_name' => $store->stores->name,
+                    'product_type' => $store->product_type,
+                    'code' => $store->code,
+                    'description' => $store->description,
+                    'category_id' => $store->category_id,
+                    'category_name' => $store->category->name,
+                    'cost_of_goods' => $store->cost_of_goods,
+                    'price_sales' => $store->price_sales,
+                    'is_ready' => $store->is_ready,
+                    'is_ppn' => $store->is_ppn,
+                    'type' => $store->type,
+                    'point_cashback' => $store->point_cashback,
+                    'time_duration' => $store->time_duration,
+                    'is_stock' => $store->is_stock,
+                    'long_delivery' => $store->long_delivery,
+                    'weight' => $store->weight,
+                    'cover' => $store->cover(),
+                    'images' => $store->images,
+                    'sales' => $store->sales->count(),
+                    'rating'  => $store->sales->count() ,
+                    'variant' => $variant    
+                   );
+            }
+            
             $available_display = $row->stores->name;
             $output[] = array(
+                'type' => 'store',
                 'name' => $row->name,
                 'code' => $row->code,
                 'description' => $row->description,

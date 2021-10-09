@@ -146,4 +146,21 @@ class Product extends Model
       $storeId =  Product::select('store_id')->where('type',2)->where('code',$code)->get()->toArray();
       return Store::whereIn('id',$storeId)->get();
     }
+
+    public function productAvailableStore($code)
+    {
+    //   $storeId =  Product::select('store_id')->where('type',2)->where('code',$code)->get()->toArray();
+      return Product::where('code',$code)->where('type',2)->get();
+    }
+
+    public function productFromStore($code,$name)
+    {
+    //   $storeId =  Product::select('store_id')->where('type',2)->where('code',$code)->get()->toArray();
+      return Product::where('code',$code)->where('name',$name)->where('type',1)->get();
+    }
+
+    public function variant()
+    {
+        
+    }
 }

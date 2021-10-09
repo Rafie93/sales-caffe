@@ -12,6 +12,7 @@ class User extends JsonResource
         $userData = [
             'id'        => $user->id,
             'fullname'      => $user->fullname ? $user->fullname : '',
+            'birthday' => $user->birthday,
             'email'     => $user->email ?  $user->email :'',
             'phone'     => $user->phone,
             'gender' => $user->gender ? $user->gender : '',
