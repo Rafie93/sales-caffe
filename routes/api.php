@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\GetIPCityController;
 use App\Http\Controllers\Api\Events\EventController;
 use App\Http\Controllers\Api\Sales\SalesController;
 use App\Http\Controllers\Api\Products\ProductSubscription;
+use App\Http\Controllers\Api\CourierController;
 
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function() {
     Route::get('location', [GetIPCityController::class, 'index']);
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
     Route::get('cities', [RegionsController::class, 'cities'])->name('regions.cities');
     Route::get('city', [RegionsController::class, 'city'])->name('regions.city');
     Route::get('districts', [RegionsController::class, 'districts'])->name('regions.districts');
+    Route::get('courier', [CourierController::class, 'index'])->name('courier');
 
     Route::post('login/email', [LoginController::class,'mail'])->name('login.mail');
     Route::post('login/phone', [LoginController::class,'phone'])->name('login.phone');
