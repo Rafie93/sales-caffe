@@ -82,12 +82,12 @@
 
                                 <td>
                                     @if ($row->is_ready==0 && $row->status==0)
-                                        <a href="{{Route('product.review',$row->id)}}" class="btn btn-primary" rel="noopener noreferrer"><i class="glyphicon glyphicon-tag"></i> Generate Voucher</a>
+                                        <a href="{{Route('bundle.generate',$row->id)}}" class="btn btn-primary" rel="noopener noreferrer"><i class="glyphicon glyphicon-tag"></i> Generate Voucher</a>
                                     @else
                                         <a href="{{Route('product.detail',$row->id)}}" class="btn btn-primary" rel="noopener noreferrer">Detail</a>
                                     @endif
-                                    <a href="" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                                    <a href="#" class="btn btn-danger delete"  r-name="{{ $row->name}}" r-id="{{ $row->id }}">
+                                    <a href="{{Route('bundle.edit',$row->id)}}" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                                    <a href="" class="btn btn-danger delete"  r-name="{{ $row->name}}" r-id="{{ $row->id }}">
                                         <i class="glyphicon glyphicon-trash"></i> Delete</a>
                                 </td>
                             </tr>

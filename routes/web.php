@@ -25,6 +25,7 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Events\EventController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Sistem\WorkTimeController;
 
 Route::get('unauthorised',[LoginController::class,'unauthorised'])->name('unauthorised');
 Route::get('/forgot', [ForgotPasswordController::class, 'index'])->name('forgot');
@@ -125,8 +126,9 @@ Route::get('/bundle', [ProductBundleController::class, 'index'])->name('product.
 Route::get('/bundle/create', [ProductBundleController::class, 'create'])->name('product.bundle.create');
 Route::post('/bundle/store', [ProductBundleController::class, 'store'])->name('product.bundle.store');
 Route::get('/bundle/{id}/delete', [ProductBundleController::class, 'delete']);
-Route::get('/bundle/{id}/edit', [BundleController::class, 'edit'])->name('bundle.edit');
-Route::post('/bundle/{id}/update', [BundleController::class, 'update'])->name('bundle.update');
+Route::get('/bundle/{id}/edit', [ProductBundleController::class, 'edit'])->name('bundle.edit');
+Route::post('/bundle/{id}/update', [ProductBundleController::class, 'update'])->name('bundle.update');
+Route::get('/bundle/{id}/generate', [ProductBundleController::class, 'generate'])->name('bundle.generate');
 
 Route::get('/promo', [ProductPromoController::class, 'index'])->name('product.promo');
 Route::get('/promo/create', [ProductPromoController::class, 'create'])->name('product.promo.create');
@@ -160,6 +162,9 @@ Route::post('/paymentmethod/store', [PaymentMethodController::class, 'store'])->
 
 Route::get('/courier', [CourierController::class, 'index'])->name('courier');
 Route::post('/courier/store', [CourierController::class, 'store'])->name('courier.store');
+
+Route::get('/worktime', [WorkTimeController::class, 'index'])->name('worktime');
+Route::post('/worktime/store', [WorkTimeController::class, 'store'])->name('worktime.store');
 
 
 Route::post('/save-push-notification-token', [HomeController::class, 'savePushNotificationToken'])->name('save-push-notification-token');

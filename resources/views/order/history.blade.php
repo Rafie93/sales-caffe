@@ -47,7 +47,7 @@
                                                     <td>{{$row->detail->count()}}</td>
                                                     <td align="right">{{number_format($row->grand_total)}}</td>
                                                     <td>{{$row->service}}</td>
-                                                    <td>{!! $row->is_status !!}</td>
+                                                    <td>{!! $row->payment_status !!}</td>
                                                     <td>
                                                         <a href="#" class="btn btn-info viewData"><i class="glyphicon glyphicon-eye-open"></i> Detail</a>                
                                                     </td>

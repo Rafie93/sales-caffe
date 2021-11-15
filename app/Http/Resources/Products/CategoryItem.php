@@ -17,6 +17,7 @@ class CategoryItem extends JsonResource
         return  [
             'id'      => $this->resource->id,
             'name' => $this->resource->name,
+            'store_id' => $this->resource->store_id
         ];
     }
 }

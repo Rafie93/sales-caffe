@@ -27,7 +27,12 @@ class EventItem extends JsonResource
             "point_cashback" => $this->resource->point_cashback,
             "image" => $this->resource->image(),
             "category" => $this->resource->category,
+            "online_link" => $this->resource->online_link,
             "subscription" => 0,
+            "is_kouta" => $this->resource->kouta == null ? false : true,
+            "kouta" => $this->resource->kouta,
+            "min_purchased" => $this->resource->min_purchased,
+            "max_purchased" => $this->resource->max_purchased,
         ];
     }
 }

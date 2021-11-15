@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\RegionsController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\AccountController;
+use App\Http\Controllers\Api\Auth\UserAddressController;
 use App\Http\Controllers\Api\Products\CategoryController;
 use App\Http\Controllers\Api\Products\ProductController;
 use App\Http\Controllers\Api\Products\ProductMerchantController;
@@ -19,6 +20,8 @@ use App\Http\Controllers\Api\Store\TaxController;
 use App\Http\Controllers\Api\Voucher\VoucherController;
 use App\Http\Controllers\Api\GetIPCityController;
 use App\Http\Controllers\Api\Events\EventController;
+use App\Http\Controllers\Api\Sales\SalesController;
+use App\Http\Controllers\Api\Products\ProductSubscription;
 
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function() {
     Route::get('location', [GetIPCityController::class, 'index']);
@@ -41,6 +44,9 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::get('account', [AccountController::class,'index']);
         Route::post('account/change', [AccountController::class,'changeProfile']);
         Route::post('change_password', [AccountController::class,'updatepassword']);
+        Route::post('address/store', [UserAddressController::class,'store']);
+        Route::get('address', [UserAddressController::class,'index']);
+        Route::post('address/update/{id}', [UserAddressController::class,'update']);
 
         Route::get('category', [CategoryController::class,'index']);
         Route::get('product/all', [ProductMerchantController::class,'index']);
@@ -51,12 +57,23 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::get('product/promo', [ProductController::class,'promo']);
         Route::get('product/variant/{productid}', [VariantController::class,'index']);
 
+        Route::get('product/bundle', [ProductSubscription::class,'index']);
+
+
         Route::get('voucher', [VoucherController::class,'index']);
         Route::get('stores', [StoreController::class,'index']);
         Route::get('seat/{storeid}', [SeatController::class,'index']);
         Route::get('tax/{storeid}', [TaxController::class,'index']);
 
         Route::get('event', [EventController::class,'index']);
+        Route::get('event/voucher', [EventController::class,'voucher']);
+        Route::get('event/ticket', [EventController::class,'ticket']);
+        Route::get('event/detail/{id}', [EventController::class,'detail']);
 
+        Route::post('event/generate_ticket', [EventController::class,'generate_ticket']);
+
+        Route::get('history', [SalesController::class,'history']);
+        Route::post('sales/store', [SalesController::class,'store']);
+        Route::post('sales/update_payment', [SalesController::class,'update_payment']);
     });
 });

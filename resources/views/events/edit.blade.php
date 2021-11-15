@@ -114,6 +114,40 @@
                                         @enderror
                                     </div>
 
+                                    <div class="form-group @error('kouta') has-error @enderror">
+                                        <label class="form-label">Kouta Event </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="kouta" required value="{{old('kouta') ? old('kouta') : $data->kouta}}">
+                                        @error('kouta')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+                                     <div class="form-group @error('min_purchased') has-error @enderror">
+                                        <label class="form-label">Minimal Purchased </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="min_purchased" required value="{{old('min_purchased') ? old('min_purchased') : $data->min_purchased}}">
+                                        @error('min_purchased')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+                                     <div class="form-group @error('max_purchased') has-error @enderror">
+                                        <label class="form-label">Maximal Purchased </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="" name="max_purchased" required value="{{old('max_purchased') ? old('max_purchased') : $data->max_purchased}}">
+                                        @error('max_purchased')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+
                                       <div class="form-group @error('file') has-error @enderror">
                                         <label class="form-label">Cover </label>
                                         <input type="file" name="file" class="form-control">

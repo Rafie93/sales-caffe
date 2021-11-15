@@ -17,7 +17,7 @@ class SalesDetail extends Model
         "price_variant",
         "qty",
         "subtotal",
-        "notes"
+        "notes","type"
     ];
 
     public function sales()

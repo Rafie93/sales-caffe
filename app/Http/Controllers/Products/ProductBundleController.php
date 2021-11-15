@@ -36,7 +36,7 @@ class ProductBundleController extends Controller
        return view('bundle.create',compact('product','categorys'));
     }
 
-      public function store(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request,[
             'name' => 'required|min:2',
@@ -82,5 +82,59 @@ class ProductBundleController extends Controller
             }
         DB::commit();
         return redirect()->route('product.bundle')->with('message','Produk Bundle Berhasil ditambahkan');
+    }
+
+    public function update(Request $request,$id)
+    {
+      
+        DB::beginTransaction();
+            $productBundle = [];
+            foreach ($request->bundle as $i => $bundle) {
+                 $productBundle[] = array(
+                    "id" => $bundle,
+                    "name" => Product::where('id',$bundle)->first()->name,
+                    "qty" => $request->qty[$i]
+                 );
+            }
+            $request->merge([
+                'createdBy'=>auth()->user()->id,
+                'bundle_product' => json_encode($productBundle)
+            ]);
+            $product = Product::find($id)->update($request->all());
+            if ($request->hasFile('file_new')) {
+                $image      = $request->file('file_new');
+                $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                $img = Image::make($image->getRealPath());
+                $img->resize(250, 250, function ($constraint) {
+                    $constraint->aspectRatio();                 
+                });
+
+                $img->stream(); 
+                Storage::disk('local')->put('public/images/product/'.$store_id.'/'.$product->id.'/'.$fileName, $img, 'public');
+                $product->cover = $fileName;
+                $product->save();
+            }
+        DB::commit();
+        return redirect()->route('product.bundle')->with('message','Produk Bundle Berhasil ditambahkan');
+    }
+
+    public function edit(Request $request,$id)
+    {
+        $product = Product::where('store_id',auth()->user()->store_id)
+                            ->where('status',1)
+                            ->where('product_type',1)
+                            ->where('is_ready',1)
+                            ->get();
+        $categorys = Category::where('store_id',auth()->user()->store_id)
+                ->where('status',1)->get() ;
+        
+        $data = Product::find($id);
+
+        return view('bundle.edit',compact('product','categorys','data'));
+    }
+    public function generate(Request $request,$id)
+    {
+        # code...
     }
 }

@@ -34,7 +34,7 @@
                                         @enderror
                                     </div>
 
-                                       <div class="form-group @error('category') has-error @enderror">
+                                    <div class="form-group @error('category') has-error @enderror">
                                         <label class="form-label">Category Event</label>
                                         {{-- <input type="text" class="form-control"
                                         placeholder="" name="category" value="{{old('category')}}"> --}}
@@ -47,6 +47,13 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                         @enderror
+                                    </div>
+
+                                    <div class="form-group" id="link_online">
+                                        <label class="form-label">Online Links</label>
+                                        <input type="text" class="form-control"
+                                        placeholder="" name="online_link" id="online_link" value="{{old('online_link')}}">
+                                       
                                     </div>
 
                                     <div class="form-group @error('date') has-error @enderror">
@@ -203,5 +210,21 @@
         filebrowserUploadUrl: "{{route('product.upload', ['_token' => csrf_token() ])}}",
         filebrowserUploadMethod: 'form'
     });
+
+    $(document).ready(function(){
+        $("#link_online").hide();
+
+        $('select[name=category]').change(function(){
+                let cat = $("#category").val();
+                if(cat=="Online"){
+                    $("#link_online").show();
+                }else{
+                    $("#link_online").hide();
+                    $("#online_link").val('');
+                }
+			});
+    });
+
+    
 </script>
 @endsection

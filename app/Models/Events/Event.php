@@ -18,7 +18,11 @@ class Event extends Model
         "price",
         "point_cashback",
         "image",
-        "category"
+        "category",
+        "kouta",
+        "online_link",
+        "min_purchased",
+        "max_purchased"
     ];
     public function image()
     {

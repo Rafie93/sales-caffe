@@ -4,6 +4,7 @@ namespace App\Models\Sales;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Sales\Sale;
 
 class Sale extends Model
 {
@@ -17,17 +18,25 @@ class Sale extends Model
         "variant_total",
         "shipping_total",
         "tax_total",
+        "fee_total",
         "discount_total",
         "admin_total",
         "point_total",
         "grand_total",
         "modal_total",
         "payment_method",
+        "payment_token",
+        "payment_status",
+        "payment_link",
         "payment_channel",
         "service",
         "service_type",
         "shipping_method",
         "delivery_to",
+        "origin_id",
+        "destination_city",
+        "postal_code",
+        "address",
         "pickup_date",
         "pickup_time",
         "seat_reservation_date",
@@ -36,11 +45,18 @@ class Sale extends Model
         "seat",
         "voucher_code",
         "status",
-        "notes"
+        "notes",
+        "customer_name",
+        "customer_phone",
+        "customer_email"
     ];
+
+    public const PAID = 'paid';
+	public const UNPAID = 'unpaid';
+
     public function detail()
     {
-        return $this->hasMany(SaleDetail::class);
+        return $this->hasMany(SalesDetail::class);
     }
     public function is_status()
     {
@@ -50,4 +66,44 @@ class Sale extends Model
     {
         return $this->belongsTo('App\Models\User','member_id');
     }
+
+    public static function generateCode($type)
+	{
+        $code = 'ORD-'; 
+        if ($type==3) {
+            $code ='TIC';
+        }else if ($type==2) {
+            $code ='OPS';
+        }
+		$dateCode = $code.date('Ymd') .integerToRoman(date('m')).integerToRoman(date('d')). '/';
+		$lastOrder = self::select([\DB::raw('MAX(sales.number) AS last_code')])
+                        ->where('number', 'like', $dateCode . '%')
+                        ->first();
+
+		$lastOrderCode = !empty($lastOrder) ? $lastOrder['last_code'] : null;
+		
+		$orderCode = $dateCode . '00001';
+		if ($lastOrderCode) {
+			$lastOrderNumber = str_replace($dateCode, '', $lastOrderCode);
+			$nextOrderNumber = sprintf('%05d', (int)$lastOrderNumber + 1);
+			
+			$orderCode = $dateCode . $nextOrderNumber;
+		}
+
+		if (self::_isOrderCodeExists($orderCode)) {
+			return generateOrderCode();
+		}
+
+		return $orderCode;
+	}
+
+    private static function _isOrderCodeExists($orderCode)
+	{
+		return Sale::where('number', '=', $orderCode)->exists();
+	}
+
+    public function isPaid()
+	{
+		return $this->payment_status == self::PAID;
+	}
 }

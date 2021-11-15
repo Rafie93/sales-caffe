@@ -19,4 +19,9 @@ class UserAddress extends Model
         'longitude',
         'is_main'
     ];
+
+    public function city()
+    {
+        return $this->belongsTo('App\Models\Regions\City');
+    }
 }

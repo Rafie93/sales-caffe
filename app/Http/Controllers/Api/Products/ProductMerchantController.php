@@ -75,7 +75,7 @@ class ProductMerchantController extends Controller
                 'variant' => $variant
                     
                );
-               $available_display .= $store->name.' /n';
+               $available_display .= $store->store_name.' ';
             }
             $output[] = array(
                 'type' => 'merchant',

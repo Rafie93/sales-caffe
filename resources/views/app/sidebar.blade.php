@@ -74,6 +74,7 @@
                                  request()->segment(1) == 'tax' ||
                                  request()->segment(1) == 'slider' ||
                                  request()->segment(1) == 'courier' ||
+                                 request()->segment(1) == 'worktime' ||
                                  request()->segment(1) == 'paymentmethod' ||
                                  request()->segment(1) == 'regions' ) ? 'active open' : '' }}"><a class="sidebar-sub-toggle"><i class="ti-settings"></i> Master & System <span class="sidebar-collapse-icon ti-angle-down"></span></a>
                             <ul>
@@ -103,7 +104,8 @@
                                     @endif
                                 </a></li>
                                 {{-- <li class="{{ (request()->segment(1) == 'access' ) ? 'active' : '' }}"><a href="#"><i class="ti-key"></i> Access</a></li> --}}
-                                <li class="{{ (request()->segment(1) == 'setting' ) ? 'active' : '' }}"><a href="#"><i class="ti-settings"></i> Setting</a></li>
+                                <li class="{{ (request()->segment(1) == 'worktime' ) ? 'active' : '' }}">
+                                    <a href="{{Route('worktime')}}"><i class="ti-settings"></i> Work Time</a></li>
                             </ul>
                         </li>
                     @endif
