@@ -23,8 +23,11 @@ use App\Http\Controllers\Api\Events\EventController;
 use App\Http\Controllers\Api\Sales\SalesController;
 use App\Http\Controllers\Api\Products\ProductSubscription;
 use App\Http\Controllers\Api\CourierController;
+use App\Http\Controllers\Api\CostController;
 
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function() {
+    Route::post('cost',[CostController::class,'index'])->name('shippingcost');;
+
     Route::get('location', [GetIPCityController::class, 'index']);
     Route::get('states', [RegionsController::class, 'provinces'])->name('regions.states');
     Route::get('cities', [RegionsController::class, 'cities'])->name('regions.cities');
