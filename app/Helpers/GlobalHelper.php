@@ -22,29 +22,49 @@ function generateOTP(){
     return $otp;
 }
 
-function nascondimiSendMessage($phone,$message)
+function nascondimiSendMessage($tujuan,$pesan)
 {
-    $key = "57d46b36b90718a5b260ba54e0ad2b548d11e1cafe3bc373";
-    $data = array(
-        'key'       => $key,
-        'phone_no'  => $phone,
-        'message'   => $message
-    );
-    $data_string = json_encode($data);
-    $ch = curl_init('http://116.203.92.59/api/send_message');
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_VERBOSE, 0);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($data_string))
-    );
-    $result = curl_exec($ch);
-    curl_close($ch);
-    return json_encode($result); 
+    // $key = "57d46b36b90718a5b260ba54e0ad2b548d11e1cafe3bc373";
+    // $data = array(
+    //     'key'       => $key,
+    //     'phone_no'  => $tujuan,
+    //     'message'   => $pesan
+    // );
+    // $data_string = json_encode($data);
+    // $ch = curl_init('http://116.203.92.59/api/send_message');
+    // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($ch, CURLOPT_VERBOSE, 0);
+    // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+    // curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    //     'Content-Type: application/json',
+    //     'Content-Length: ' . strlen($data_string))
+    // );
+    // $result = curl_exec($ch);
+    // curl_close($ch);
+    $apikey="b36b0460a07b324a3eb179ee30703006a39455da";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://starsender.online/api/sendText?message='.rawurlencode($pesan).'&tujuan='.rawurlencode($tujuan.'@s.whatsapp.net'),
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_HTTPHEADER => array(
+        'apikey: '.$apikey
+    ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    return json_encode($response); 
 }
 
 
