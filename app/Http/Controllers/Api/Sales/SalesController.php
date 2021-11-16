@@ -43,22 +43,22 @@ class SalesController extends Controller
             'grand_total'   => 'required',
             'type_sales' => 'required',
             'payment_method' => 'required',
-            'products' => 'required|json'
+            'products' => 'required|json',
+            'number' => 'required||unique:sales'
         ]);
         if ($validator->fails()) {
             return response()->json(array("errors"=>validationErrors($validator->errors())), 422);
         }
 
-        if ($request->type_sales==3) {
-            $code = Sale::generateCode(3);
-        }else if ($request->type_sales==2) {
-            $code = Sale::generateCode(2);
-        }else{
-            $code = Sale::generateCode(1);
-        }
+        // if ($request->type_sales==3) {
+        //     $code = Sale::generateCode(3);
+        // }else if ($request->type_sales==2) {
+        //     $code = Sale::generateCode(2);
+        // }else{
+        //     $code = Sale::generateCode(1);
+        // }
 
         $request->merge([
-            'number' => $code,
             'date' => date('Y-m-d'),
             'member_id' => $customer_id,
             'customer_name' => auth()->user()->fullname,

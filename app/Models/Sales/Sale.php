@@ -48,7 +48,9 @@ class Sale extends Model
         "notes",
         "customer_name",
         "customer_phone",
-        "customer_email"
+        "customer_email",
+        "payment_no",
+        "payment_expired"
     ];
 
     public const PAID = 'paid';
