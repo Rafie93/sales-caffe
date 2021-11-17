@@ -93,7 +93,7 @@ class EventController extends Controller
             $request->all()
         );
         $tot_generate = ETicket::where("sales_event_id",$request->sales_event_id)->get()->count();
-        $eventSales = SalesEvent::where('id',$request->sales_event_id)->first();
+        $eventSales = SalesEvent::where('sale_id',$request->sales_event_id)->first();
         $totalQty = $eventSales->qty;
         $remainder = $totalQty - $tot_generate;
         SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
