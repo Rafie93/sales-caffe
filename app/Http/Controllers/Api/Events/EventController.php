@@ -34,15 +34,44 @@ class EventController extends Controller
         $data = SalesEvent::where('member_id',auth()->user()->id)
                             ->where('status',1)
                             ->where('remainder','>',0)
-                            ->paginate('30');
-        return response()->json($data);
+                            ->get();
+        $output = array();
+        foreach ($data as $row) {
+            $output[] = array(
+                "id" => $row->id,
+                "sale_id" => $row->sale_id,
+                "event_id" => $row->event_id,
+                "remainder" => $row->remainder,
+                "status" => $row->status,
+                "created_at" => $row->created_at,
+                "event" => new EventItem(Event::where('id',$row->event_id)->first())
+            );
+        }
+        return response()->json([
+            'success'=>true,
+            'data'=>$output,
+        ], 200);
 
     }
 
     public function ticket(Request $request)
     {
         $data = ETicket::where('phone',auth()->user()->phone)->get();
-        return response()->json($data);
+        $output = array();
+        foreach ($data as $row) {
+            $output[] = array(
+                "id" => $row->id,
+                "sales_event_id" => $row->sales_event_id,
+                "event_id" => $row->event_id,
+                "participant_name" => $row->participant_name,
+                "phone" => $row->phone,
+                "event" => new EventItem(Event::where('id',$row->event_id)->first())
+            );
+        }
+        return response()->json([
+            'success'=>true,
+            'data'=>$output,
+        ], 200);
 
     }
     public function generate_ticket(Request $request)
