@@ -14,7 +14,7 @@ class SalesController extends Controller
 {
     public function history(Request $request)
     {
-        $data = Sale::where('member_id',auth()->user()->id)->get();
+        $data = Sale::orderBy('id','desc')->where('member_id',auth()->user()->id)->get();
         return response()->json([
             'success'=>true,
             'data'=>$data,

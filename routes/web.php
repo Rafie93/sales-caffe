@@ -26,10 +26,16 @@ use App\Http\Controllers\Events\EventController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Sistem\WorkTimeController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('unauthorised',[LoginController::class,'unauthorised'])->name('unauthorised');
 Route::get('/forgot', [ForgotPasswordController::class, 'index'])->name('forgot');
 Route::post('/forgot/check', [ForgotPasswordController::class, 'check'])->name('forgot.check');
+
+Route::post('payments/notification', [PaymentController::class,'notification']);
+Route::get('payments/completed', [PaymentController::class,'completed']);
+Route::get('payments/failed', [PaymentController::class,'failed']);
+Route::get('payments/unfinish', [PaymentController::class,'unfinish']);
 
 Auth::routes();   
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
