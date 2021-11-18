@@ -92,12 +92,18 @@ class PaymentController extends Controller
 			\DB::transaction(
 				function () use ($order, $payment) {
 					if (in_array($payment->status, [Payment::SUCCESS, Payment::SETTLEMENT])) {
-						$order->payment_status = Order::PAID;
+						$order->payment_status = 'paid';
 						$order->status = 2;
 						$order->save();
 					}
 				}
 			);
+		}
+
+		if ($paymentStatus == PAYMENT::EXPIRE || $paymentStatus == PAYMENT::CANCEL ) {
+			$order->payment_status = 'unpaid';
+			$order->status = 6;
+			$order->save();
 		}
 
 		$message = 'Payment status is : '. $paymentStatus;
