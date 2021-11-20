@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Sistem\WorkTimeController;
 use App\Http\Controllers\PaymentController;
 
+Route::get('/firebase',[HomeController::class, 'firebasetest']);
+
 Route::get('unauthorised',[LoginController::class,'unauthorised'])->name('unauthorised');
 Route::get('/forgot', [ForgotPasswordController::class, 'index'])->name('forgot');
 Route::post('/forgot/check', [ForgotPasswordController::class, 'check'])->name('forgot.check');
@@ -55,6 +57,9 @@ Route::post('/users/{id}/update', [userController::class, 'update'])->name('user
 
 Route::get('/order/process', [OrderController::class, 'index'])->name('order');
 Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
+Route::post('/order/update', [OrderController::class, 'update'])->name('order.update');
+Route::get('/order/detail/{id}', [OrderController::class, 'detail'])->name('order.detail');
+
 
 Route::get('/member', [MemberController::class, 'index'])->name('member');
 
@@ -175,3 +180,4 @@ Route::post('/worktime/store', [WorkTimeController::class, 'store'])->name('work
 
 Route::post('/save-push-notification-token', [HomeController::class, 'savePushNotificationToken'])->name('save-push-notification-token');
 Route::post('/send-push-notification', [HomeController::class, 'sendPushNotification'])->name('send.push-notification');
+

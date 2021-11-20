@@ -21,6 +21,22 @@ function generateOTP(){
     $otp = mt_rand(1000,9999);
     return $otp;
 }
+ 
+function statusOrder($status)
+{
+    if ($status==1) {
+        return "Waiting Payment";
+    }else if ($status==2) {
+        return "Prepare Order";
+    }else if ($status==3) {
+        return "Delivery";
+    }else if ($status==4) {
+        return "Order Accepted";
+    }else if ($status==5) {
+        return "Canceled";
+    }
+    return "";
+}
 
 function nascondimiSendMessage($tujuan,$pesan)
 {

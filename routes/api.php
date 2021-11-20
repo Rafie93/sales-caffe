@@ -44,6 +44,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
     Route::get('slider/store/{id}', [SliderController::class,'store']);
     Route::get('news', [NewsController::class,'index']);
 
+    Route::get('sales/detail', [SalesController::class,'detail'])->name('sale.detail');
+
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('method', [MethodController::class,'index']);
         Route::get('account', [AccountController::class,'index']);
@@ -78,6 +80,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::post('event/generate_ticket', [EventController::class,'generate_ticket']);
 
         Route::get('history', [SalesController::class,'history']);
+        Route::get('history/complete', [SalesController::class,'history_complete']);
+
         Route::post('sales/store', [SalesController::class,'store']);
         Route::post('sales/update_payment', [SalesController::class,'update_payment']);
     });

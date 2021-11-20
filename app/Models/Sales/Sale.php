@@ -15,6 +15,7 @@ class Sale extends Model
         "date",
         "member_id",
         "store_id",
+        "firebase_id",
         "variant_total",
         "shipping_total",
         "tax_total",
@@ -67,6 +68,20 @@ class Sale extends Model
     public function member()
     {
         return $this->belongsTo('App\Models\User','member_id');
+    }
+
+    public function stores()
+    {
+        return $this->belongsTo('App\Models\Stores\Store','store_id');
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo('App\Models\Regions\City','destination_city');
+    }
+    public function origin()
+    {
+        return $this->belongsTo('App\Models\Regions\City','origin_id');
     }
 
     public static function generateCode($type)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sales\Sale;
+use App\Models\Sales\SalesDetail;
 use App\Models\Sales\Payment;
 class PaymentController extends Controller
 {
@@ -87,6 +88,7 @@ class PaymentController extends Controller
 		];
 
 		$payment = Payment::create($paymentParams);
+		$firebase = $this->initFirebase();
 
 		if ($paymentStatus && $payment) {
 			\DB::transaction(
@@ -95,6 +97,32 @@ class PaymentController extends Controller
 						$order->payment_status = 'paid';
 						$order->status = 2;
 						$order->save();
+						//
+						if ($order->type_sales != 3) {
+							$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
+							$menu_product_name ="";
+							foreach ($salesDetail as $detail) {
+								$menu_product_name .= $detail->qty." x ".$detail->products->name."\n";
+							}
+							$postData = [
+								"id" =>$order->id,
+								"store_name" => $order->stores->name,
+								"number" =>$order->number,
+								"customer_id" => $order->member_id,
+								"customer_name" => $order->member->fullname,
+								"date" =>  $order->created_at->format('D, d M Y : H:i:s'),
+								"grand_total" => $order->grand_total,
+								"menu_name" => $menu_product_name,
+								"service"=> $order->service,
+								"status"=> 'Prepare Order',
+								"payment_status" => $order->payment_status,
+								"payment_method" => $order->payment_method
+							];
+							$updates = ['orders/store-'.$order->store_id.'/'.$order->firebase_id => $postData];
+							$firebase->getReference()->update($updates);
+						}
+						
+						//
 					}
 				}
 			);
@@ -104,6 +132,30 @@ class PaymentController extends Controller
 			$order->payment_status = 'unpaid';
 			$order->status = 6;
 			$order->save();
+			//
+			if ($order->type_sales != 3) {
+				$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
+				$menu_product_name ="";
+				foreach ($salesDetail as $detail) {
+					$menu_product_name .= $detail->qty." x ".$detail->products->name."\n";
+				}
+				$postData = [
+					"id" =>$order->id,
+					"store_name" => $order->stores->name,
+					"number" =>$order->number,
+					"customer_id" => $order->member_id,
+					"customer_name" => $order->member->fullname,
+					"date" =>  $order->created_at->format('D, d M Y : H:i:s'),
+					"grand_total" => $order->grand_total,
+					"menu_name" => $menu_product_name,
+					"service"=> $order->service,
+					"status"=> 'Canceled',
+					"payment_status" => $order->payment_status,
+					"payment_method" => $order->payment_method
+				];
+				$updates = ['orders/store-'.$order->store_id.'/'.$order->firebase_id => $postData];
+				$firebase->getReference()->update($updates);
+			}
 		}
 
 		$message = 'Payment status is : '. $paymentStatus;

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Events\EventList as ListResource;
 use Carbon\Carbon;
 use App\Models\Sales\SalesEvent;
+use App\Models\Sales\Sales;
 use App\Http\Resources\Events\EventItem;
 
 
@@ -31,10 +32,15 @@ class EventController extends Controller
 
     public function voucher(Request $request)
     {
-        $data = SalesEvent::where('member_id',auth()->user()->id)
-                            ->where('status',1)
-                            ->where('remainder','>',0)
-                            ->get();
+        $data = 
+                SalesEvent::leftJoin('sales', function($join) {
+                    $join->on('sales.id', '=', 'sales_event.sale_id');
+                })
+                ->where('sales.payment_status','paid')
+                ->where('sales_event.member_id',auth()->user()->id)
+                ->where('sales_event.status',1)
+                ->where('remainder','>',0)
+                ->get();
         $output = array();
         foreach ($data as $row) {
             $output[] = array(
@@ -77,6 +83,7 @@ class EventController extends Controller
     public function generate_ticket(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'sales_id' => 'required',
             'sales_event_id'      => 'required',
             'event_id'   => 'required',
             'participant_name' => 'required',
@@ -97,6 +104,7 @@ class EventController extends Controller
         $totalQty = $eventSales->qty;
         $remainder = $totalQty - $tot_generate;
         SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
+        Sales::find($request->sales_id)->update(['status'=>4]);
         $message = "E-Ticket \nTicket anda sudah release,\n\nSilahkan buka aplikasi office-coffee anda ";
         nascondimiSendMessage($request->phone,$message);
         return response()->json([

@@ -24,4 +24,8 @@ class SalesDetail extends Model
     {
         return $this->belongsTo(Sale::class);
     }
+    public function products()
+    {
+        return $this->belongsTo("App\Models\Products\Product","product_id");
+    }
 }

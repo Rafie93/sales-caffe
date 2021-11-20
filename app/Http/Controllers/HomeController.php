@@ -10,7 +10,7 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+      //  $this->middleware('auth');
     }
 
     public function index()
@@ -53,5 +53,15 @@ class HomeController extends Controller
         $response = curl_exec($ch);
   
         dd($response);
+    }
+
+    public function firebasetest()
+    {
+        $firebase = $this->initFirebase();
+        $poshData = [
+			"fullname" => "mila",
+			"lastname" => "azzahra"
+		];
+		$postRef = $firebase->getReference('contacts')->push($poshData);
     }
 }
