@@ -20,6 +20,7 @@ class Sale extends Model
         "shipping_total",
         "tax_total",
         "fee_total",
+        "sub_total",
         "discount_total",
         "admin_total",
         "point_total",

@@ -121,8 +121,20 @@ class PaymentController extends Controller
 							$updates = ['orders/store-'.$order->store_id.'/'.$order->firebase_id => $postData];
 							$firebase->getReference()->update($updates);
 						}
+						$title = "Transaction ".$order->number." (PAID)";
+						$body  = $title." ".$order->member->fullname." Baru Saja Melakukan Pembayaran via ".$order->payment_method." Sebesar Rp ".number_format($prder->grand_total);
+						sendFirebaseToAdminStore($order->store_id,$title,$body);
+						$notifFirebaseData = [
+							"title" => $title,
+							"body" => $body,
+							"from" => $order->member_id,
+							"to" => $order->store_id,
+							"code" => $order->number,
+							"type" => "sales",
+							"is_read" => "belum"
+						];
+						$firebase->getReference('notification')->push($notifFirebaseData);
 						
-						//
 					}
 				}
 			);

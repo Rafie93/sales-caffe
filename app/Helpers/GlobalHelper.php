@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 function validationErrors($errors)
 {
     $errorList = [];
@@ -40,26 +42,6 @@ function statusOrder($status)
 
 function nascondimiSendMessage($tujuan,$pesan)
 {
-    // $key = "57d46b36b90718a5b260ba54e0ad2b548d11e1cafe3bc373";
-    // $data = array(
-    //     'key'       => $key,
-    //     'phone_no'  => $tujuan,
-    //     'message'   => $pesan
-    // );
-    // $data_string = json_encode($data);
-    // $ch = curl_init('http://116.203.92.59/api/send_message');
-    // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    // curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($ch, CURLOPT_VERBOSE, 0);
-    // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
-    // curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    //     'Content-Type: application/json',
-    //     'Content-Length: ' . strlen($data_string))
-    // );
-    // $result = curl_exec($ch);
-    // curl_close($ch);
     $apikey="b36b0460a07b324a3eb179ee30703006a39455da";
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -81,6 +63,104 @@ function nascondimiSendMessage($tujuan,$pesan)
     curl_close($curl);
 
     return json_encode($response); 
+}
+ 
+function sendFirebaseGlobal($title,$body)
+{
+    $firebaseToken = User::whereNotNull('fcm_token')->pluck('fcm_token')->all();
+
+    $SERVER_API_KEY = env('FIRE_SERVER_KEY');
+  
+    $data = [
+        "registration_ids" => $firebaseToken,
+        "notification" => [
+            "title" => $title,
+            "body" => $body,  
+        ]
+    ];
+    $dataString = json_encode($data);
+
+    $headers = ['Authorization: key=' . $SERVER_API_KEY,'Content-Type: application/json'];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+           
+    $response = curl_exec($ch);
+
+    return $response;
+}
+
+function sendFirebasePerUser($idUser,$title,$body)
+{
+    $firebaseToken = User::where('id',$idUser)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token')->all();
+
+    $SERVER_API_KEY = env('FIRE_SERVER_KEY');
+  
+    $data = [
+        "registration_ids" => $firebaseToken,
+        "notification" => [
+            "title" => $title,
+            "body" => $body,  
+        ]
+    ];
+    $dataString = json_encode($data);
+
+    $headers = ['Authorization: key=' . $SERVER_API_KEY,'Content-Type: application/json'];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+           
+    $response = curl_exec($ch);
+
+    return $response;
+}
+
+function sendFirebaseToAdminStore($store_id,$title,$body)
+{
+    $firebaseToken = User::where('store_id',$store_id)
+                            ->whereIn('role',[12,13,14])
+                            ->whereNotNull('fcm_token')
+                            ->pluck('fcm_token')->all();
+
+    $SERVER_API_KEY = env('FIRE_SERVER_KEY');
+  
+    $data = [
+        "registration_ids" => $firebaseToken,
+        "notification" => [
+            "title" => $title,
+            "body" => $body,  
+        ]
+    ];
+    $dataString = json_encode($data);
+
+    $headers = ['Authorization: key=' . $SERVER_API_KEY,'Content-Type: application/json'];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+           
+    $response = curl_exec($ch);
+
+    return $response;
 }
 
 
