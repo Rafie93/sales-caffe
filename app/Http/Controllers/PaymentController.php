@@ -97,7 +97,7 @@ class PaymentController extends Controller
 						$order->save();
 						//
 						$firebase = $this->initFirebase();
-						$sale = Sale::where('number', $order->order_id)->first();
+						$sale = Sale::where('id', $order->order_id)->first();
 						if ($order->type_sales != 3) {
 							$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
 							$menu_product_name ="";
@@ -146,7 +146,7 @@ class PaymentController extends Controller
 			$order->save();
 			//
 			if ($order->type_sales != 3) {
-				$sale = Sale::where('number', $order->order_id)->first();
+				$sale = Sale::where('id', $order->order_id)->first();
 				$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
 				$menu_product_name ="";
 				foreach ($salesDetail as $detail) {
