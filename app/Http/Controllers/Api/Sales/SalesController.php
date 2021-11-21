@@ -51,6 +51,8 @@ class SalesController extends Controller
             'data'=>new SaleItem($sales)
         ], 200);
     }
+
+    
     public function detail_event(Request $request)
     {
         $saleId = $request->id;
@@ -96,6 +98,22 @@ class SalesController extends Controller
             ];
             $updates = ['orders/store-'.$sale->store_id.'/'.$sale->firebase_id => $postData];
             $firebase->getReference()->update($updates);
+
+            //
+            $title = "Transaction ".$sale->number." (PAID)";
+            $body  = $title." ".$sale->member->fullname." Baru Saja Melakukan Pembayaran via ".$sale->payment_method." Sebesar Rp ".number_format($prder->grand_total);
+            sendFirebaseToAdminStore($sale->store_id,$title,$body);
+            $notifFirebaseData = [
+                "title" => $title,
+                "body" => $body,
+                "from" => $sale->member_id,
+                "to" => $sale->store_id,
+                "code" => $sale->number,
+                "type" => "sales",
+                "is_read" => "belum"
+            ];
+            $firebase->getReference('notification')->push($notifFirebaseData);
+            //
         }
        
         return response()->json([

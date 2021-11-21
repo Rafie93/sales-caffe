@@ -88,8 +88,6 @@ class PaymentController extends Controller
 		];
 
 		$payment = Payment::create($paymentParams);
-		$firebase = $this->initFirebase();
-
 		if ($paymentStatus && $payment) {
 			\DB::transaction(
 				function () use ($order, $payment) {
@@ -98,6 +96,8 @@ class PaymentController extends Controller
 						$order->status = 2;
 						$order->save();
 						//
+						$firebase = $this->initFirebase();
+						$sale = Sale::where('number', $paymentNotification->order_id)->first();
 						if ($order->type_sales != 3) {
 							$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
 							$menu_product_name ="";
@@ -118,18 +118,18 @@ class PaymentController extends Controller
 								"payment_status" => $order->payment_status,
 								"payment_method" => $order->payment_method
 							];
-							$updates = ['orders/store-'.$order->store_id.'/'.$order->firebase_id => $postData];
+							$updates = ['orders/store-'.$sale->store_id.'/'.$sale->firebase_id => $postData];
 							$firebase->getReference()->update($updates);
 						}
-						$title = "Transaction ".$order->number." (PAID)";
-						$body  = $title." ".$order->member->fullname." Baru Saja Melakukan Pembayaran via ".$order->payment_method." Sebesar Rp ".number_format($prder->grand_total);
-						sendFirebaseToAdminStore($order->store_id,$title,$body);
+						$title = "Transaction ".$sale->number." (PAID)";
+						$body  = $title." ".$sale->member->fullname." Baru Saja Melakukan Pembayaran via ".$sale->payment_method." Sebesar Rp ".number_format($prder->grand_total);
+						sendFirebaseToAdminStore($sale->store_id,$title,$body);
 						$notifFirebaseData = [
 							"title" => $title,
 							"body" => $body,
-							"from" => $order->member_id,
-							"to" => $order->store_id,
-							"code" => $order->number,
+							"from" => $sale->member_id,
+							"to" => $sale->store_id,
+							"code" => $sale->number,
 							"type" => "sales",
 							"is_read" => "belum"
 						];
@@ -146,6 +146,7 @@ class PaymentController extends Controller
 			$order->save();
 			//
 			if ($order->type_sales != 3) {
+				$sale = Sale::where('number', $order->order_id)->first();
 				$salesDetail = SalesDetail::where('sale_id',$order->id)->get();
 				$menu_product_name ="";
 				foreach ($salesDetail as $detail) {
@@ -165,7 +166,8 @@ class PaymentController extends Controller
 					"payment_status" => $order->payment_status,
 					"payment_method" => $order->payment_method
 				];
-				$updates = ['orders/store-'.$order->store_id.'/'.$order->firebase_id => $postData];
+				$firebase = $this->initFirebase();
+				$updates = ['orders/store-'.$sale->store_id.'/'.$sale->firebase_id => $postData];
 				$firebase->getReference()->update($updates);
 			}
 		}
