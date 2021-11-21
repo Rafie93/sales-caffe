@@ -123,7 +123,6 @@
 						},
 						dataType: 'JSON',
 						success: function (response) {
-							alert('Token saved successfully.');
 						},
 						error: function (err) {
 							console.log('User Chat Token Error'+ err);
@@ -180,6 +179,35 @@
 		}
 				toastr.warning("{{ session('warning') }}");
 		@endif
+	</script>
+	<script>
+			 var storeId = <?php echo Auth()->user()->store_id ?> ;
+			firebase.database().ref('notification/store-'+storeId).orderByChild('is_read').equalTo("belum")
+				.on('value', function(snapshot) {
+                var value = snapshot.val();
+                var htmls = [];
+				var i=0;
+                $.each(value, function(index, value){
+					if(value) {
+						htmls.push('<li>\
+							<a href="#">\
+								<div class="notification-content">\
+									<small class="notification-timestamp pull-right">02:34 PM</small>\
+									<div class="notification-heading">'+value.title+'</div>\
+									<div class="notification-text">'+value.body+'</div>\
+								</div>\
+							</a>\
+						</li>\
+						');
+						i++;
+					}    	
+                lastIndex = index;
+                });
+                $('#isi_notif').html(htmls);
+				if(i>0){
+					$('#count_bell').html(i);
+				}
+			});
 	</script>
 	@yield('script')
 

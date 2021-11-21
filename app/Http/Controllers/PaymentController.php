@@ -131,9 +131,10 @@ class PaymentController extends Controller
 							"to" => $sale->store_id,
 							"code" => $sale->number,
 							"type" => "sales",
-							"is_read" => "belum"
+							"is_read" => "belum",
+							"time" => $sale->updated_at
 						];
-						$firebase->getReference('notification')->push($notifFirebaseData);
+						$firebase->getReference('notification/store-'.$sale->store_id)->push($notifFirebaseData);
 						
 					}
 				}

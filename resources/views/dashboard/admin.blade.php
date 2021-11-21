@@ -6,6 +6,7 @@
                         <div class="page-header">
                             <div class="page-title">
                                 <h1>Dashboard</h1>
+                               
                             </div>
                         </div>
                     </div>
@@ -20,6 +21,8 @@
                             </div>
                         </div>
                     </div>
+                    <button id="btn-nft-enable" onclick="initFirebaseMessagingRegistration()" class="btn btn-danger btn-xs btn-flat">Allow for Notification</button>
+                    <br/><br/>
                     <!-- /# column -->
                 </div>
                 <!-- /# row -->
@@ -313,4 +316,15 @@
     <script src="assets/js/lib/datamap/datamap-init.js"></script>
     <script src="assets/lib/lobipanel/js/lobipanel.js"></script>
     <script src="assets/js/scripts.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-messaging.js"></script>  
+    <script>
+         $( function() {
+			 initFirebaseMessagingRegistration();
+         });
+    </script>
 @endsection

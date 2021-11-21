@@ -98,4 +98,9 @@
     <script src="assets/js/lib/datamap/datamap-init.js"></script>
     <script src="assets/lib/lobipanel/js/lobipanel.js"></script>
     <script src="assets/js/scripts.js"></script>
+    <script>
+        $( function() {
+            initFirebaseMessagingRegistration();
+        });
+   </script>
 @endsection
