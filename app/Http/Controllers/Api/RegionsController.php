@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Regions\City;
+use App\Models\Regions\District;
 use App\Models\Regions\RegionQuery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -35,13 +36,15 @@ class RegionsController extends Controller
         if ($provinceId = $request->get('province_id'))
             $data = City::select('id','name')->where('province_id',$provinceId)->get();
 
-        return response()->json([ 'success' => true,'data' => $data],200);
+        return response()->json($data,200);
     }
 
     public function districts(Request $request)
     {
         if ($cityId = $request->get('city_id'))
-            return $this->queryObject->getDistrictsList($cityId);
+            $data = District::select('id','name')->where('city_id',$cityId)->get();
+            return response()->json($data,200);
+
 
         return [];
     }

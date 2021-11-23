@@ -4,7 +4,7 @@ namespace App\Http\Resources\Products;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Products\VariantItem as ItemVariant;
-
+use App\Models\Products\ProductPromo;
 class ProductItem extends JsonResource
 {
     /**
@@ -15,7 +15,7 @@ class ProductItem extends JsonResource
      */
     public function toArray($request)
     {
-       $variant = [];
+       $variant = array();
        foreach ($this->resource->variants as $vari){
            $variant[] = array(
                 'id'      => $vari->id,
@@ -27,6 +27,26 @@ class ProductItem extends JsonResource
                 'options' => json_decode($vari->options)
            );
        }
+       $product_pairing = [];
+       foreach ($this->resource->pairings as $pair){
+           $product_pairing = json_decode($pair->product_pairing);
+       }
+       $price_promo = 0;
+       $productPromo = ProductPromo::where('product_id',$this->resource->id)
+                                    ->where('start_date','<=',date('Y-m-d'))
+                                    ->where('end_date','>=',date('Y-m-d'))
+                                    ->get();
+      if ($productPromo->count()>0) {
+         $productPromo = $productPromo->first();
+         $type = $productPromo->type;
+         if ($type=='percentage') {
+            $price_sale = $this->resource->price_sales;
+            $price_promo = intval(($price_sale * $productPromo->amount)/100);
+         }else{
+            $price_promo = intval($productPromo->amount);
+         }
+         $price_promo = $this->resource->price_sales - $price_promo;
+      }
        return  [
             'id'      => $this->resource->id,
             'name' => $this->resource->name,
@@ -39,6 +59,7 @@ class ProductItem extends JsonResource
             'category_name' => $this->resource->category->name,
             'cost_of_goods' => $this->resource->cost_of_goods,
             'price_sales' => $this->resource->price_sales,
+            'price_promo' => $price_promo,
             'is_ready' => $this->resource->is_ready,
             'is_ppn' => $this->resource->is_ppn,
             'type' => $this->resource->type,
@@ -51,7 +72,8 @@ class ProductItem extends JsonResource
             'images' => $this->resource->images,
             'sales' => $this->resource->sales->count(),
             'rating'  => $this->resource->sales->count(),
-            'variant' => $variant
+            'variant' => $variant,
+            'pairing' => $product_pairing
         ];
     }
 }

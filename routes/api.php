@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\Sales\SalesController;
 use App\Http\Controllers\Api\Products\ProductSubscription;
 use App\Http\Controllers\Api\CourierController;
 use App\Http\Controllers\Api\CostController;
+use App\Http\Controllers\Api\Dashboard\SpecialController;
 
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function() {
     Route::post('cost',[CostController::class,'index'])->name('shippingcost');;
@@ -34,6 +35,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
     Route::get('city', [RegionsController::class, 'city'])->name('regions.city');
     Route::get('districts', [RegionsController::class, 'districts'])->name('regions.districts');
     Route::get('courier', [CourierController::class, 'index'])->name('courier');
+    Route::post('spesial', [SpecialController::class, 'index']);
+
 
     Route::post('login/email', [LoginController::class,'mail'])->name('login.mail');
     Route::post('login/phone', [LoginController::class,'phone'])->name('login.phone');
@@ -45,6 +48,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
     Route::get('news', [NewsController::class,'index']);
 
     Route::get('sales/detail', [SalesController::class,'detail'])->name('sale.detail');
+    Route::get('sales/detail_event', [SalesController::class,'detail_event'])->name('sale.detail_event');
 
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('method', [MethodController::class,'index']);

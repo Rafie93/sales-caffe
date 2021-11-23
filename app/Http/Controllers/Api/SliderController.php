@@ -13,7 +13,7 @@ class SliderController extends Controller
     {
        $slider = Slider::orderBy('id','desc')
                     ->whereNull('store_id')
-                    ->paginate(10);
+                    ->paginate(8);
 
        return new ListResource($slider);
     }

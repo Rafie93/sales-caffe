@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Sales\SaleItem;
 use App\Http\Resources\Sales\SaleList;
+use App\Models\Stores\StoreTable;
 
 class SalesController extends Controller
 {
@@ -57,7 +58,7 @@ class SalesController extends Controller
     {
         $saleId = $request->id;
         $sales = Sale::where('id',$saleId)->first();
-        $detail = SalesDetail::where('sale_id',$saleId)->get();
+        $detail = SalesEvent::where('sale_id',$saleId)->get();
         
         return response()->json([
             'success'=>true,
@@ -246,6 +247,14 @@ class SalesController extends Controller
                             "status" => 1
                         ]);
                     }
+                }
+
+                if ($request->seat!="" || $request->seat!=null) {
+                    StoreTable::where('store_id',$sale->store_id)
+                                ->where('table_number',$request->seat)
+                                ->update([
+                                    'is_ready' => 0
+                                ]);
                 }
 
             DB::commit();

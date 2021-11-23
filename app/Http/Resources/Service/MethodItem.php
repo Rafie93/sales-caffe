@@ -19,7 +19,7 @@ class MethodItem extends JsonResource
             'code'      => $this->resource->code,
             'name' => $this->resource->name,
             'type'     => $this->resource->type,
-            'fee'     => $this->resource->fee,
+            'fee'     => floatval($this->resource->fee),
             'charged' =>  $this->resource->charged,
         ];
     }

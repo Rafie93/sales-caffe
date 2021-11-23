@@ -17,6 +17,7 @@ class TaxItem extends JsonResource
           return  [
             'id'      => $this->resource->id,
             'store_id' => $this->resource->store_id,
+            'name' => $this->resource->name,
             'type' => $this->resource->type,
             'amount' => $this->resource->amount
         ];

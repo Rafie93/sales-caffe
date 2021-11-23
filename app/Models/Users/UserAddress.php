@@ -13,6 +13,7 @@ class UserAddress extends Model
         'user_id',
         'city_id',
         'district_id',
+        'district_name',
         'address',
         'postalcode',
         'latitude',

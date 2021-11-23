@@ -28,6 +28,10 @@ class ProductSpecial extends Model
     {
         return $this->belongsTo('App\Models\Regions\State');
     }
+    public function store()
+    {
+        return $this->belongsTo('App\Models\Stores\Store','store_id');
+    }
     public function city()
     {
         return $this->belongsTo('App\Models\Regions\City');

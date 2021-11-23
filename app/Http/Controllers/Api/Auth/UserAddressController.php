@@ -25,10 +25,11 @@ class UserAddressController extends Controller
                 'province_id' => $row->city->province_id,
                 'province' => $row->city->province,
                 'district_id' => $row->district_id,
+                'district_name' => $row->district_name,
                 'address' => $row->address,
                 'postalcode' => $row->postalcode,
-                'latitude' => $row->latitude,
-                'longitude' => $row->longitude,
+                'latitude' => strval($row->latitude),
+                'longitude' => strval($row->longitude),
                 'is_main' => $row->is_main
             );
         }

@@ -13,6 +13,7 @@ class SeatController extends Controller
     {
         $seats = StoreTable::orderBy('sequence','asc')
                             ->where('store_id',$id)
+                            ->where('status',1)
                             ->get();
 
         return new ListResource($seats);
