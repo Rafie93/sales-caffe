@@ -13,7 +13,7 @@ class News extends Model
     
     public function cover()
     {
-        return $this->cover==null ? 'Tidak Ada Image' : asset('/storage/images/news/'.$this->id.'/'.$this->cover);
+        return $this->cover==null ? 'Tidak Ada Image' : asset('images/news/'.$this->cover);
     }
 
 }

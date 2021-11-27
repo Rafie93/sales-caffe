@@ -140,6 +140,7 @@ Route::get('/bundle/{id}/delete', [ProductBundleController::class, 'delete']);
 Route::get('/bundle/{id}/edit', [ProductBundleController::class, 'edit'])->name('bundle.edit');
 Route::post('/bundle/{id}/update', [ProductBundleController::class, 'update'])->name('bundle.update');
 Route::get('/bundle/{id}/generate', [ProductBundleController::class, 'generate'])->name('bundle.generate');
+Route::post('/bundle/{id}/generate', [ProductBundleController::class, 'generate_voucher'])->name('bundle.generate_voucher');
 
 Route::get('/promo', [ProductPromoController::class, 'index'])->name('product.promo');
 Route::get('/promo/create', [ProductPromoController::class, 'create'])->name('product.promo.create');

@@ -12,7 +12,7 @@ class Slider extends Model
 
     public function slide()
     {
-        return $this->slide==null ? 'Tidak Ada Image' : asset('/storage/images/slider/'.$this->id.'/'.$this->slide);
+        return $this->slide==null ? 'Tidak Ada Image' : asset('images/slider/'.$this->slide);
     }
 
 }

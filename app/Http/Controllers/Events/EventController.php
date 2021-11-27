@@ -47,14 +47,11 @@ class EventController extends Controller
       
         $events = Event::create($request->all());
         if ($request->hasFile('cover')) {
-            $image      = $request->file('cover');
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/event/'.$events->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('cover')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('cover')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('cover')->move('images/event/',$fileName);
             $events->image = $fileName;
             $events->save();
         }
@@ -73,13 +70,11 @@ class EventController extends Controller
         $events = Event::find($id);
         $events->update($request->all());
         if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/event/'.$events->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('cover')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('cover')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('cover')->move('images/event/',$fileName);
             $events->image = $fileName;
             $events->save();
         }

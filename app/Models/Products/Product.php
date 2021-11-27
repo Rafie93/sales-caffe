@@ -64,7 +64,7 @@ class Product extends Model
 
     public function cover()
     {
-        return $this->cover==null ? 'Tidak Ada Image' : asset('/storage/images/product/'.$this->store_id.'/'.$this->id.'/'.$this->cover);
+        return $this->cover==null ? 'Tidak Ada Image' : asset('images/product/'.$this->cover);
     }
     public function IS_STATUS()
     {

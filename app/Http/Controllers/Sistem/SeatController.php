@@ -44,16 +44,11 @@ class SeatController extends Controller
         ]);
         $seats = StoreTable::create($request->all());
         if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
-
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/seat/'.$seats->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/news/',$fileName);
             $seats->image = $fileName;
             $seats->save();
        }
@@ -68,16 +63,14 @@ class SeatController extends Controller
         $seats = StoreTable::find($id);
         $seats->update($request->all());
         if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+            $image_path = public_path().'/images/seat/'.$seats->image;
+            unlink($image_path);
 
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/seat/'.$id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/seat/',$fileName);
             $seats->image = $fileName;
             $seats->save();
        }
@@ -87,6 +80,8 @@ class SeatController extends Controller
     public function delete($id)
     {
         $seat=StoreTable::find($id);
+        $image_path = public_path().'/images/seat/'.$seat->image;
+        unlink($image_path);
         $seat->delete();
         return redirect()->route('seat')->with('message','Berhasil dihapus');
     }

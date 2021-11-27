@@ -31,8 +31,12 @@ class StoresController extends Controller
         ]);
         $store = Store::create($request->all());
         if ($request->hasFile('file')) {
-            $request->file('file')->move(public_path('images/stores'),$request->file('file')->getClientOriginalName());
-            $store->logo= $request->file('file')->getClientOriginalName();
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/stores/',$fileName);
+            $store->logo= $fileName;
             $store->save();
        }
         return redirect()->route('stores')->with('message','Toko Baru Berhasil ditambahkan');
@@ -47,8 +51,15 @@ class StoresController extends Controller
         $store = Store::find($id);
         $store->update($request->all());
         if ($request->hasFile('file')) {
-            $request->file('file')->move(public_path('images/stores'),$request->file('file')->getClientOriginalName());
-            $store->update(['logo'=>$request->file('file')->getClientOriginalName()]);
+            $image_path = public_path().'/images/stores/'.$store->logo;
+            unlink($image_path);
+
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/stores/',$fileName);
+            $store->update(['logo'=>$fileName]);
        }
         return redirect()->route('stores')->with('message','Toko Baru Berhasil diperbaharui');
     }

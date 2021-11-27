@@ -40,15 +40,11 @@ class NewsController extends Controller
 
         $news = News::create($request->all());
          if ($request->hasFile('cover')) {
-            $image      = $request->file('cover');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
-            $img = Image::make($image->getRealPath());
-            $img->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/news/'.$news->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('cover')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('cover')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('cover')->move('images/news/',$fileName);
             $news->cover = $fileName;
             $news->save();
        }
@@ -81,15 +77,14 @@ class NewsController extends Controller
         $news = News::find($id);
         $news->update($request->all());
          if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
-            $img = Image::make($image->getRealPath());
-            $img->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/news/'.$news->id.'/'.$fileName, $img, 'public');
+            $image_path = public_path().'/images/news/'.$news->cover;
+            unlink($image_path);
+            
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/news/',$fileName);
             $news->cover = $fileName;
             $news->save();
        }
@@ -98,6 +93,8 @@ class NewsController extends Controller
     public function delete($id)
     {
         $news=News::find($id);
+        $image_path = public_path().'/images/news/'.$news->cover;
+        unlink($image_path);
         $news->delete();
         return redirect()->route('news')->with('message','Berhasil dihapus');
     }

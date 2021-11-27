@@ -44,16 +44,11 @@ class SliderController extends Controller
 
         $slider = Slider::create($request->all());
          if ($request->hasFile('slide')) {
-            $image      = $request->file('slide');
-            $fileName   = 'SLIDER'.time() . '.' . $image->getClientOriginalExtension();
-
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/slider/'.$slider->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('slide')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('slide')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('slide')->move('images/slider/',$fileName);
             $slider->slide = $fileName;
             $slider->save();
        }
@@ -68,16 +63,14 @@ class SliderController extends Controller
         $slider = Slider::find($id);
         $slider->update($request->all());
          if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = 'SLIDER'.time() . '.' . $image->getClientOriginalExtension();
+            $image_path = public_path().'/images/slider/'.$slider->slide;
+            unlink($image_path);
 
-            $img = Image::make($image->getRealPath());
-            $img->resize(400, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/slider/'.$slider->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/slider/',$fileName);
             $slider->slide = $fileName;
             $slider->save();
        }
@@ -103,6 +96,8 @@ class SliderController extends Controller
      public function delete($id)
     {
         $slider=Slider::find($id);
+        $image_path = public_path().'/images/slider/'.$slider->slide;
+        unlink($image_path);
         $slider->delete();
         return redirect()->route('slider')->with('message','Berhasil dihapus');
     }

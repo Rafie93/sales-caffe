@@ -26,7 +26,7 @@ class Event extends Model
     ];
     public function image()
     {
-        return $this->image==null ? 'Tidak Ada Image' : asset('/storage/images/event/'.$this->id.'/'.$this->image);
+        return $this->image==null ? 'Tidak Ada Image' : asset('images/event/'.$this->image);
     }
       public function stores()
     {

@@ -36,6 +36,6 @@ class StoreTable extends Model
 
     public function image()
     {
-        return $this->image==null ? 'Tidak Ada Image' : asset('/storage/images/seat/'.$this->id.'/'.$this->image);
+        return $this->image==null ? 'Tidak Ada Image' : asset('images/seat/'.$this->image);
     }
 }

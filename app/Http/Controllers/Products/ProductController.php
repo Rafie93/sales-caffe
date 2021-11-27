@@ -94,16 +94,11 @@ class ProductController extends Controller
         ]);
         $product = Product::create($request->all());
         if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
-
-            $img = Image::make($image->getRealPath());
-            $img->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/product/'.$store_id.'/'.$product->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/product/',$fileName);
             $product->cover = $fileName;
             $product->save();
        }
@@ -121,16 +116,11 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->update($request->all());
         if ($request->hasFile('file')) {
-            $image      = $request->file('file');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
-
-            $img = Image::make($image->getRealPath());
-            $img->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/product/'.$product->store_id.'/'.$product->id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/product/',$fileName);
             $product->cover = $fileName;
             $product->save();
        }
@@ -177,13 +167,11 @@ class ProductController extends Controller
 
         $productImage = ProductImage::create($request->all());
         if ($request->hasFile('file')) {
-            $fileName   = time() . '.' . $request->file('file')->getClientOriginalExtension();
-            $img = Image::make($request->file('file')->getRealPath());
-            $img->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
-            $img->stream(); 
-            Storage::disk('local')->put('public/images/product/'.$store_id.'/'.$id.'/'.$fileName, $img, 'public');
+            $originName = $request->file('file')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.time().'.'.$extension;
+            $request->file('file')->move('images/product/',$fileName);
             $productImage->image = $fileName;
             $productImage->save();
         }

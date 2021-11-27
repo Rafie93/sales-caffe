@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Products;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Products\Product;
+use App\Models\Products\ProductBundle;
 use App\Models\Products\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -67,16 +68,11 @@ class ProductBundleController extends Controller
             ]);
             $product = Product::create($request->all());
             if ($request->hasFile('file')) {
-                $image      = $request->file('file');
-                $fileName   = time() . '.' . $image->getClientOriginalExtension();
-
-                $img = Image::make($image->getRealPath());
-                $img->resize(250, 250, function ($constraint) {
-                    $constraint->aspectRatio();                 
-                });
-
-                $img->stream(); 
-                Storage::disk('local')->put('public/images/product/'.$store_id.'/'.$product->id.'/'.$fileName, $img, 'public');
+                $originName = $request->file('file')->getClientOriginalName();
+                $fileName = pathinfo($originName, PATHINFO_FILENAME);
+                $extension = $request->file('file')->getClientOriginalExtension();
+                $fileName = $fileName.'_'.time().'.'.$extension;
+                $request->file('file')->move('images/product/',$fileName);
                 $product->cover = $fileName;
                 $product->save();
             }
@@ -102,16 +98,11 @@ class ProductBundleController extends Controller
             ]);
             $product = Product::find($id)->update($request->all());
             if ($request->hasFile('file_new')) {
-                $image      = $request->file('file_new');
-                $fileName   = time() . '.' . $image->getClientOriginalExtension();
-
-                $img = Image::make($image->getRealPath());
-                $img->resize(250, 250, function ($constraint) {
-                    $constraint->aspectRatio();                 
-                });
-
-                $img->stream(); 
-                Storage::disk('local')->put('public/images/product/'.$store_id.'/'.$product->id.'/'.$fileName, $img, 'public');
+                $originName = $request->file('file_new')->getClientOriginalName();
+                $fileName = pathinfo($originName, PATHINFO_FILENAME);
+                $extension = $request->file('file_new')->getClientOriginalExtension();
+                $fileName = $fileName.'_'.time().'.'.$extension;
+                $request->file('fifile_newle')->move('images/product/',$fileName);
                 $product->cover = $fileName;
                 $product->save();
             }
@@ -135,6 +126,35 @@ class ProductBundleController extends Controller
     }
     public function generate(Request $request,$id)
     {
-        # code...
+        $bundle = Product::find($id);
+        return view('bundle.generate',compact('bundle'));
+    }
+
+    public function generate_voucher(Request $request,$id)
+    {
+
+        $this->validate($request,[
+            'name' => 'required|min:2',
+            'code'    => 'required|unique:product_bundle',
+            'price'=> 'required|numeric',
+            'quantity' => 'required|numeric',
+            'expired' => 'required'
+        ]);
+
+        $request->merge([
+            'store_id' => auth()->user()->store_id,
+            'product_id' => $id
+        ]);
+        
+        ProductBundle::create($request->all());
+
+        $bundle = Product::find($id);
+        $bundle->update([
+            'is_ready' => 1,
+            'status' => 1
+        ]);
+
+        return redirect()->route('product.bundle')->with('message','Produk Bundle Berhasil ditambahkan');
+
     }
 }
