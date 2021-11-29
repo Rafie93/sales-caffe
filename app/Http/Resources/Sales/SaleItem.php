@@ -35,13 +35,13 @@ class SaleItem extends JsonResource
             foreach ($this->resource->events as $row) {
                 $det[] = array(
                     'sale_id' => $row->sale_id,
-                    'product_id' => $row->event->id,
+                    'product_id' => strval($row->event->id),
                     'product_name' => $row->event->name,
-                    'qty' => $row->qty,
-                    'price' => $row->event->price,
-                    'price_promo' => 0,
-                    'price_variant' => 0,
-                    'subtotal' => $row->event->price * $row->qty,
+                    'qty' => strval($row->qty),
+                    'price' => strval($row->event->price),
+                    'price_promo' => "0",
+                    'price_variant' => "0",
+                    'subtotal' => strval($row->event->price * $row->qty),
                     'notes'=> ""
                 );
                 $item_string .= $row->qty."x ".$row->event->name."\n";

@@ -42,6 +42,7 @@ class BundleItem extends JsonResource
             'expired' => $this->resource->expired,
             'day' => $this->resource->day,
             'point_cashback' => $this->resource->products->point_cashback,
+            'cover' => $this->resource->products->cover(),
             'bundle' => $bdl
 
         ];
