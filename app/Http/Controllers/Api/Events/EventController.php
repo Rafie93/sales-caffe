@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Events\EventList as ListResource;
 use Carbon\Carbon;
 use App\Models\Sales\SalesEvent;
-use App\Models\Sales\Sales;
+use App\Models\Sales\Sale;
 use App\Http\Resources\Events\EventItem;
 
 
@@ -105,7 +105,7 @@ class EventController extends Controller
         $totalQty = $eventSales->qty;
         $remainder = $totalQty - $tot_generate;
         SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
-        Sales::find($request->sales_id)->update(['status'=>4]);
+        Sale::find($request->sales_id)->update(['status'=>4]);
         $message = "E-Ticket \nTicket anda sudah release,\n\nSilahkan buka aplikasi office-coffee anda ";
         nascondimiSendMessage($request->phone,$message);
         return response()->json([
