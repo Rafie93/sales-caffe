@@ -33,7 +33,8 @@ class EventController extends Controller
     public function voucher(Request $request)
     {
         $data = 
-                SalesEvent::leftJoin('sales', function($join) {
+                SalesEvent::select('sales_event.*')
+                    ->leftJoin('sales', function($join) {
                     $join->on('sales.id', '=', 'sales_event.sale_id');
                 })
                 ->where('sales.payment_status','paid')
@@ -42,6 +43,7 @@ class EventController extends Controller
                 ->where('remainder','>',0)
                 ->get();
         $output = array();
+        dd($data);
         foreach ($data as $row) {
             $output[] = array(
                 "id" => $row->id,
