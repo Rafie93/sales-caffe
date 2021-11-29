@@ -43,7 +43,6 @@ class EventController extends Controller
                 ->where('remainder','>',0)
                 ->get();
         $output = array();
-        dd($data);
         foreach ($data as $row) {
             $output[] = array(
                 "id" => $row->id,
