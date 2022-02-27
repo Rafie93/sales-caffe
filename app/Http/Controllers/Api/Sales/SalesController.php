@@ -266,7 +266,7 @@ class SalesController extends Controller
                 }
 
             DB::commit();
-            // $this->_generatePaymentToken($sale);
+            $this->_generatePaymentToken($sale);
             return response()->json([
                 'success'=>true,
                 'message'=>'Silahkan Lakukan Proses Pembayaran',
