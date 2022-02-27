@@ -83,13 +83,13 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::get('event/ticket', [EventController::class,'ticket']);
         Route::get('event/detail/{id}', [EventController::class,'detail']);
         Route::get('event/ticket/use/{id}', [EventController::class,'ticket_use']);
-
+        Route::get('history/event/{id}', [SalesController::class,'detail_event']);
         Route::post('event/generate_ticket', [EventController::class,'generate_ticket']);
 
         Route::get('history', [SalesController::class,'history']);
         Route::get('history/complete', [SalesController::class,'history_complete']);
         Route::get('history/detail/{id}', [SalesController::class,'detail']);
-
+        Route::get('history/event', [SalesController::class,'history_event']);
         Route::post('sales/store', [SalesController::class,'store']);
         Route::post('sales/update_payment', [SalesController::class,'update_payment']);
 

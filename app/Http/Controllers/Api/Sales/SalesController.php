@@ -68,10 +68,17 @@ class SalesController extends Controller
         $sales = Sale::where('id',$saleId)->first();
         $detail = SalesEvent::where('sale_id',$saleId)->get();
         
-        return response()->json([
-            'success'=>true,
-            'data'=>new SaleItem($sales)
-        ], 200);
+        if ($sales) {
+            return response()->json([
+                'success'=>true,
+                'data'=>new SaleItem($sales)
+            ], 200);
+        }else{
+            return response()->json([
+                'success'=>false,
+                'data'=>null
+            ], 200);
+        }
     }
 
     public function update_payment(Request $request)
