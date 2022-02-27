@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\Products\ProductSubscription;
 use App\Http\Controllers\Api\CourierController;
 use App\Http\Controllers\Api\CostController;
 use App\Http\Controllers\Api\Dashboard\SpecialController;
+use App\Http\Controllers\Api\Carts\CartController;
 
 Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function() {
     Route::post('cost',[CostController::class,'index'])->name('shippingcost');;
@@ -46,6 +47,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
     Route::get('slider', [SliderController::class,'index']);
     Route::get('slider/store/{id}', [SliderController::class,'store']);
     Route::get('news', [NewsController::class,'index']);
+    Route::get('news/{id}', [NewsController::class,'detail']);
 
     Route::get('sales/detail', [SalesController::class,'detail'])->name('sale.detail');
     Route::get('sales/detail_event', [SalesController::class,'detail_event'])->name('sale.detail_event');
@@ -85,8 +87,16 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
 
         Route::get('history', [SalesController::class,'history']);
         Route::get('history/complete', [SalesController::class,'history_complete']);
+        Route::get('history/detail/{id}', [SalesController::class,'detail']);
 
         Route::post('sales/store', [SalesController::class,'store']);
         Route::post('sales/update_payment', [SalesController::class,'update_payment']);
+
+        Route::get('cart/data', [CartController::class,'index']);
+        Route::get('cart/detail/{id}', [CartController::class,'detail']);
+        Route::post('cart/store', [CartController::class,'store']);
+        Route::post('cart/update/{id}', [CartController::class,'update']);
+        Route::post('cart/delete/{id}', [CartController::class,'delete']);
+
     });
 });
