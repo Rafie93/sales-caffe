@@ -66,21 +66,50 @@ class EventController extends Controller
         $data = ETicket::where('phone',auth()->user()->phone)->get();
         $output = array();
         foreach ($data as $row) {
+            $status = "E-Ticket Siap Diguanakan";
+            if ($row->status==2) {
+                $status = "E-Ticket Sudah Digunakan";
+            }else if ($row->status==3) {
+                $status = "E-Ticket Sudah Expired, Tidak dapat digunakan lagi";
+            }
             $output[] = array(
                 "id" => $row->id,
                 "sales_event_id" => $row->sales_event_id,
                 "event_id" => $row->event_id,
                 "participant_name" => $row->participant_name,
                 "phone" => $row->phone,
+                "status" => $row->status,
+                "status_display" => $status,
                 "event" => new EventItem(Event::where('id',$row->event_id)->first())
             );
-        }
+        }   
         return response()->json([
             'success'=>true,
             'data'=>$output,
         ], 200);
-
     }
+    
+    public function ticket_use(Request $request,$id)
+    {
+        $data = ETicket::where('phone',auth()->user()->phone)
+                        ->where('status',1)
+                        ->first();
+        if ($data) {
+            $data->update([
+                'status' => 2
+            ]);
+            return response()->json([
+                'success'=>true,
+                'message'=>"E-Ticket di Gunakan",
+            ], 200);
+        }else{
+            return response()->json([
+                'success'=>false,
+                'message'=>"E-Ticket Tidak dapat digunakan",
+            ], 200);
+        }
+    }
+
     public function generate_ticket(Request $request)
     {
         $validator = Validator::make($request->all(), [
