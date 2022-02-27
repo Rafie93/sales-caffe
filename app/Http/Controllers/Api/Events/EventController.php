@@ -88,7 +88,7 @@ class EventController extends Controller
             'data'=>$output,
         ], 200);
     }
-    
+
     public function ticket_use(Request $request,$id)
     {
         $data = ETicket::where('phone',auth()->user()->phone)
@@ -133,14 +133,21 @@ class EventController extends Controller
         $eventSales = SalesEvent::where('id',$request->sales_event_id)->first();
         $totalQty = $eventSales->qty;
         $remainder = $totalQty - $tot_generate;
-        SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
-        Sale::find($request->sales_id)->update(['status'=>4]);
-        $message = "E-Ticket \nTicket anda sudah release,\n\nSilahkan buka aplikasi office-coffee anda ";
-        nascondimiSendMessage($request->phone,$message);
-        return response()->json([
-            'success'=>true,
-            'message'=>'Ticket di generate',
-        ], 200);
-
+        if ($remainder >= 0) {
+            SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
+            Sale::find($request->sales_id)->update(['status'=>4]);
+            $message = "E-Ticket \nTicket anda sudah release,\n\nSilahkan buka aplikasi office-coffee anda ";
+            nascondimiSendMessage($request->phone,$message);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Ticket di generate',
+            ], 200);
+        }else{
+            return response()->json([
+                'success'=>false,
+                'message'=>'Jumlah Pembelian Tiket Sudah Tidak Mencukupi',
+            ], 200);
+        }
+       
     }
 }
