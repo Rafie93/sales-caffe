@@ -69,6 +69,7 @@ class SaleItem extends JsonResource
             'payment_method' =>  $this->resource->payment_method,
             'payment_status'      => $this->resource->payment_status,
             'payment_no' =>  $this->resource->payment_no,
+            'payment_link' =>  $this->resource->payment_link,
             'payment_expired'      => $this->resource->payment_expired,
             'service'      => $this->resource->service,
             'shipping_method' => $this->resource->shipping_method,
