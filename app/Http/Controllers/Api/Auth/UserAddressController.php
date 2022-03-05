@@ -30,7 +30,7 @@ class UserAddressController extends Controller
                 'postalcode' => $row->postalcode,
                 'latitude' => strval($row->latitude),
                 'longitude' => strval($row->longitude),
-                'is_main' => $row->is_main
+                'is_main' => strval($row->is_main)
             );
         }
 
