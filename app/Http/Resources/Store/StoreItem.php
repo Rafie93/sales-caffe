@@ -19,15 +19,15 @@ class StoreItem extends JsonResource
             'code' => $this->resource->code,
             'email' => $this->resource->email,
             'name' => $this->resource->name,
-            'state_id' => $this->resource->state_id,
+            'state_id' => strval($this->resource->state_id),
             'state_name' => $this->resource->state->name,
-            'city_id' => $this->resource->city_id,
-            'city_name' => $this->resource->city->name,
-            'district_id' => $this->resource->district_id,
+            'city_id' => strval($this->resource->city_id),
+            'city_name' => strval($this->resource->city->name),
+            'district_id' => strval($this->resource->district_id),
             'address' => $this->resource->address,
-            'latitude' => $this->resource->latitude,
+            'latitude' => doubleval($this->resource->latitude),
             'phone' => $this->resource->phone,
-            'longitude' => $this->resource->longitude,
+            'longitude' => doubleval($this->resource->longitude),
             'logo' => $this->resource->logo()
         ];
     }
