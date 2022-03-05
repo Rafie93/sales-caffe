@@ -19,12 +19,12 @@ class UserAddressController extends Controller
         $data = array();
         foreach ($address as $row) {
             $data[] = array(
-                'id' => $row->id,
-                'city_id' => $row->city_id,
+                'id' => strval($row->id),
+                'city_id' => strval($row->city_id),
                 'city' => $row->city->name,
-                'province_id' => $row->city->province_id,
+                'province_id' => strval($row->city->province_id),
                 'province' => $row->city->province,
-                'district_id' => $row->district_id,
+                'district_id' => strval($row->district_id),
                 'district_name' => $row->district_name,
                 'address' => $row->address,
                 'postalcode' => $row->postalcode,
