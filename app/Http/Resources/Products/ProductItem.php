@@ -52,7 +52,7 @@ class ProductItem extends JsonResource
             'name' => $this->resource->name,
             'store_id' => intval($this->resource->store_id),
             'store_name' => $this->resource->stores->name,
-            'product_type' => $this->resource->product_type,
+            'product_type' => strval($this->resource->product_type),
             'code' => $this->resource->code,
             'description' => $this->resource->description,
             'category_id' => strval($this->resource->category_id),
