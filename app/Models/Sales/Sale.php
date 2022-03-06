@@ -67,6 +67,10 @@ class Sale extends Model
     {
         return $this->hasMany(SalesEvent::class);
     }
+    public function bundles()
+    {
+        return $this->hasMany(SalesBundle::class);
+    }
     public function is_status()
     {
         return $this->status;

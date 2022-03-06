@@ -37,7 +37,7 @@ class BundleItem extends JsonResource
             'product_id' => intval($this->resource->product_id),
             'product_name' => $this->resource->products->name,
             'price'  => intval($this->resource->price),
-            'quantity'  => intval($this->resource->price),
+            'quantity'  => intval($this->resource->quantity),
             'description' => $this->resource->description,
             'expired' => strval($this->resource->expired),
             'day' => $this->resource->day,

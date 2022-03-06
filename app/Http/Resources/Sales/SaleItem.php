@@ -47,6 +47,22 @@ class SaleItem extends JsonResource
                 $item_string .= $row->qty."x ".$row->event->name."\n";
             }
         }
+        if ($this->resource->type_sales==2) {
+            foreach ($this->resource->bundles as $row) {
+                $det[] = array(
+                    'sale_id' => strval($row->sale_id),
+                    'product_id' => strval($row->bundle->id),
+                    'product_name' => $row->bundle->name,
+                    'qty' => strval($row->qty),
+                    'price' => strval($row->price),
+                    'price_promo' => "0",
+                    'price_variant' => "0",
+                    'subtotal' => strval($row->price * $row->qty),
+                    'notes'=> ""
+                );
+                $item_string .= $row->qty."x ".$row->event->name."\n";
+            }
+        }
         return  [
             'id'      => intval($this->resource->id),
             'firebase_id'      => strval($this->resource->firebase_id),

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Sales\Sale;
 use App\Models\Sales\SalesDetail;
 use App\Models\Sales\SalesEvent;
+use App\Models\Sales\SalesBundle;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Sales\SaleItem;
@@ -229,25 +231,16 @@ class SalesController extends Controller
                     $produkArray = json_decode($productcss, true);
                     $macamProduk = count($produkArray);
                     for ($i=0; $i < $macamProduk; $i++) {
-                        $product_id = $produkArray[$i]["product_id"];
-                        $price = $produkArray[$i]['price'];
-                        $price_promo = $produkArray[$i]["price_promo"];
-                        $price_variant = $produkArray[$i]["price_variant"];
-                        $qty = $produkArray[$i]['qty'];
-                        $notes = $produkArray[$i]["notes"];
-
-                        $detail = new \App\Models\Sales\SalesDetail;
-                        $detail->sale_id = $saleId;
-                        $detail->store_id = $sale->store_id;
-                        $detail->product_id = $product_id;
-                        $detail->price_promo = $price_promo;
-                        $detail->price_variant = $price_variant;
-                        $detail->qty = $qty;
-                        $detail->price = $price;
-                        $detail->type = 1;
-                        $detail->subtotal = (($price-$price_promo) + $price_variant) * $qty;
-                        $detail->notes = $notes;
-                        $detail->save();
+                        SalesBundle::create([
+                            "sale_id" => $saleId,
+                            "member_id" => auth()->user()->id,
+                            "bundle_id" => $produkArray[$i]["bundle_id"],
+                            "price" => $produkArray[$i]["price"],
+                            "qty" => $produkArray[$i]["qty"],
+                            "remainder" => $produkArray[$i]["qty"],
+                            "product_id" => $produkArray[$i]["product_id"],
+                            "status" => 1
+                        ]);
                     }
                 }else if ($productcss && $request->type_sales == 3){
                     $produkArray = json_decode($productcss, true);
