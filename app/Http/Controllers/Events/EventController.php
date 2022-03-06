@@ -70,11 +70,11 @@ class EventController extends Controller
         $events = Event::find($id);
         $events->update($request->all());
         if ($request->hasFile('file')) {
-            $originName = $request->file('cover')->getClientOriginalName();
+            $originName = $request->file('file')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('cover')->getClientOriginalExtension();
+            $extension = $request->file('file')->getClientOriginalExtension();
             $fileName = $fileName.'_'.time().'.'.$extension;
-            $request->file('cover')->move('images/event/',$fileName);
+            $request->file('file')->move('images/event/',$fileName);
             $events->image = $fileName;
             $events->save();
         }
