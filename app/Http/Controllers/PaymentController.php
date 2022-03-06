@@ -93,7 +93,7 @@ class PaymentController extends Controller
 				function () use ($order, $payment) {
 					if (in_array($payment->status, [Payment::SUCCESS, Payment::SETTLEMENT])) {
 						$order->payment_status = 'paid';
-						$order->payment_method = $type;
+						$order->payment_method = $paymentNotification->type;
 						$order->status = 2;
 						$order->save();
 						//
@@ -144,7 +144,7 @@ class PaymentController extends Controller
 
 		if ($paymentStatus == PAYMENT::EXPIRE || $paymentStatus == PAYMENT::CANCEL ) {
 			$order->payment_status = 'unpaid';
-			$order->payment_method = $type;
+			$order->payment_method = $paymentNotification->type;
 			$order->status = 6;
 			$order->save();
 			//
