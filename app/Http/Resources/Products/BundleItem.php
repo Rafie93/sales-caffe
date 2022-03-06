@@ -23,25 +23,25 @@ class BundleItem extends JsonResource
                $image = $p->cover();
             }
             $bdl[] = array(
-                'id' => $value->id,
+                'id' => strval($value->id),
                 'name' => $value->name,
-                'qty' => $value->qty,
+                'qty' => strval($value->qty),
                 'image' => $image
             );
         }
         return  [
-            'id'      => $this->resource->id,
+            'id'      => intval($this->resource->id),
             'name' => $this->resource->name,
-            'store_id' => $this->resource->store_id,
+            'store_id' => intval($this->resource->store_id),
             'store_name' => $this->resource->stores->name,
-            'product_id' => $this->resource->product_id,
+            'product_id' => intval($this->resource->product_id),
             'product_name' => $this->resource->products->name,
-            'price'  => $this->resource->price,
-            'quantity'  => $this->resource->price,
+            'price'  => intval($this->resource->price),
+            'quantity'  => intval($this->resource->price),
             'description' => $this->resource->description,
-            'expired' => $this->resource->expired,
+            'expired' => strval($this->resource->expired),
             'day' => $this->resource->day,
-            'point_cashback' => $this->resource->products->point_cashback,
+            'point_cashback' => intval($this->resource->products->point_cashback),
             'cover' => $this->resource->products->cover(),
             'bundle' => $bdl
 
