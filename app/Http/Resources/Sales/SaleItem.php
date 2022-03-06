@@ -57,7 +57,7 @@ class SaleItem extends JsonResource
                     'price' => strval($row->price),
                     'price_promo' => "0",
                     'price_variant' => "0",
-                    'subtotal' => strval($row->price * $row->qty),
+                    'subtotal' => strval($row->price),
                     'notes'=> ""
                 );
                 $item_string .= $row->qty."x ".$row->bundle->name."\n";
