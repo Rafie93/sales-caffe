@@ -47,7 +47,7 @@ class RegisterController extends Controller
             User::create([
                 'phone' => $request->phone,
                 'fullname' => '-',
-                'email' => '@gmail.com',
+                'email' => null,
                 'status' => 1,
                 'role' => 15,
                 'password' => bcrypt($request->phone),
