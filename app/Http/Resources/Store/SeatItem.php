@@ -15,15 +15,15 @@ class SeatItem extends JsonResource
     public function toArray($request)
     {       
           return  [
-            'id'      => $this->resource->id,
-            'store_id' => $this->resource->store_id,
+            'id'      => intval($this->resource->id),
+            'store_id' => intval($this->resource->store_id),
             'store_name' => $this->resource->store->name,
-            'table_number' => $this->resource->table_number,
+            'table_number' => strval($this->resource->table_number),
             'description' => $this->resource->description,
-            'sequence' => $this->resource->sequence,
-            'minimum_shopping' => $this->resource->minimum_shopping,
-            'maximum' => $this->resource->maximum,
-            'is_ready' => $this->resource->is_ready,
+            'sequence' => intval($this->resource->sequence),
+            'minimum_shopping' =>intval($this->resource->minimum_shopping),
+            'maximum' => intval($this->resource->maximum),
+            'is_ready' => intval($this->resource->is_ready),
             'image'  => $this->resource->image()
         ];
     }

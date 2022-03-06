@@ -64,8 +64,6 @@ class SeatController extends Controller
         $seats->update($request->all());
         if ($request->hasFile('file')) {
             $image_path = public_path().'/images/seat/'.$seats->image;
-            unlink($image_path);
-
             $originName = $request->file('file')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('file')->getClientOriginalExtension();
@@ -81,7 +79,6 @@ class SeatController extends Controller
     {
         $seat=StoreTable::find($id);
         $image_path = public_path().'/images/seat/'.$seat->image;
-        unlink($image_path);
         $seat->delete();
         return redirect()->route('seat')->with('message','Berhasil dihapus');
     }

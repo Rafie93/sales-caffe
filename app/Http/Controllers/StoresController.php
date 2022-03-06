@@ -52,8 +52,6 @@ class StoresController extends Controller
         $store->update($request->all());
         if ($request->hasFile('file')) {
             $image_path = public_path().'/images/stores/'.$store->logo;
-            unlink($image_path);
-
             $originName = $request->file('file')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('file')->getClientOriginalExtension();
