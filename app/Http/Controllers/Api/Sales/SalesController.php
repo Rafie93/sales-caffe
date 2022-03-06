@@ -277,7 +277,7 @@ class SalesController extends Controller
             return response()->json([
                 'success'=>true,
                 'message'=>'Silahkan Lakukan Proses Pembayaran',
-                'data' => Sale::find($sale->id)
+                'data'=>new SaleItem($sale)
             ], 200);
         }catch (\PDOException $e) {
             DB::rollBack();

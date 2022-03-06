@@ -81,6 +81,7 @@ class SaleItem extends JsonResource
             'address'     => strval($this->resource->address),
             'postal_code'     => strval($this->resource->postal_code),
             'pickup_date' =>  strval($this->resource->pickup_date),
+            'pickup_time' =>  strval($this->resource->pickup_time),
             'customer_phone' =>  strval($this->resource->customer_phone),
             'seat_reservation_date' => strval($this->resource->seat_reservation_date),
             'seat_reservation_start'     => strval($this->resource->seat_reservation_start),
