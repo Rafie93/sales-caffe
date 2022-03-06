@@ -92,9 +92,13 @@ class PaymentController extends Controller
 			\DB::transaction(
 				function () use ($order, $payment) {
 					if (in_array($payment->status, [Payment::SUCCESS, Payment::SETTLEMENT])) {
+						$statusPembelian = 2;
+						if ($order->type_sales==2 || $order->type_sales==3) {
+							$statusPembelian = 5;
+						}
 						$order->payment_status = 'paid';
 						$order->payment_method = $payment->payment_type;
-						$order->status = 2;
+						$order->status = $statusPembelian;
 						$order->save();
 						//
 						$firebase = $this->initFirebase();
