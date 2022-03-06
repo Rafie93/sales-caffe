@@ -12,6 +12,27 @@ use App\Http\Resources\Products\ProductItem;
 
 class ProductController extends Controller
 {
+
+    public function popular(Request $request)
+    {
+        $products = Product::orderBy('id','desc')
+                        ->whereIn('product_type',[1,2])
+                        ->where('status',1)
+                        ->paginate(4);
+
+        return new ListResource($products);
+    }
+
+    public function promo(Request $request)
+    {
+        $products = Product::orderBy('price_sales','asc')
+                        ->whereIn('product_type',[1,2])
+                        ->where('status',1)
+                        ->paginate(4);
+
+        return new ListResource($products);
+    }
+
     public function index(Request $request,$storeId)
     {
         $products = Product::orderBy('id','desc')
@@ -22,6 +43,7 @@ class ProductController extends Controller
 
         return new ListResource($products);
     }
+    
      public function detail(Request $request,$id)
     {
         $product = Product::where('id',$id)->first();

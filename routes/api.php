@@ -66,7 +66,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::get('product/store/{id}', [ProductController::class,'index']);
         Route::get('product/detail/{id}', [ProductController::class,'detail']);
 
-        Route::get('product/popular', [ProductMerchantController::class,'popular']);
+        Route::get('product/popular', [ProductController::class,'popular']);
         Route::get('product/promo', [ProductController::class,'promo']);
         Route::get('product/variant/{productid}', [VariantController::class,'index']);
 
