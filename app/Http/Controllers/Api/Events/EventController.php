@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Events\EventList as ListResource;
 use Carbon\Carbon;
 use App\Models\Sales\SalesEvent;
+use App\Models\Sales\SalesBundle;
+
 use App\Models\Sales\Sale;
 use App\Http\Resources\Events\EventItem;
 
@@ -60,6 +62,37 @@ class EventController extends Controller
         ], 200);
 
     }
+
+    public function voucher_bundle(Request $request)
+    {
+        $data = 
+                SalesEvent::select('sales_product_subscription.*')
+                    ->leftJoin('sales', function($join) {
+                    $join->on('sales.id', '=', 'sales_product_subscription.sale_id');
+                })
+                ->where('sales.payment_status','paid')
+                ->where('sales_product_subscription.member_id',auth()->user()->id)
+                ->where('sales_product_subscription.status',1)
+                ->where('remainder','>',0)
+                ->get();
+        $output = array();
+        foreach ($data as $row) {
+            $output[] = array(
+                "id" => $row->id,
+                "sale_id" => $row->sale_id,
+                "bundle_id" => $row->bundle_id,
+                "remainder" => $row->remainder,
+                "status" => $row->status,
+                "created_at" => $row->created_at,
+            );
+        }
+        return response()->json([
+            'success'=>true,
+            'data'=>$output,
+        ], 200);
+
+    }
+
 
     public function ticket(Request $request)
     {
@@ -131,8 +164,8 @@ class EventController extends Controller
         );
         $tot_generate = ETicket::where("sales_event_id",$request->sales_event_id)->get()->count();
         $eventSales = SalesEvent::where('id',$request->sales_event_id)->first();
-        $totalQty = $eventSales->qty;
-        $remainder = $totalQty - $tot_generate;
+        $totalQty = $eventSales->remainder;
+        $remainder = $totalQty - 1;
         if ($remainder >= 0) {
             SalesEvent::find($request->sales_event_id)->update(['remainder'=>$remainder]);
             Sale::find($request->sales_id)->update(['status'=>4]);

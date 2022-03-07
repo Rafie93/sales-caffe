@@ -80,6 +80,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
 
         Route::get('event', [EventController::class,'index']);
         Route::get('event/voucher', [EventController::class,'voucher']);
+        Route::get('event/bundle', [EventController::class,'voucher_bundle']);
+
         Route::get('event/ticket', [EventController::class,'ticket']);
         Route::get('event/detail/{id}', [EventController::class,'detail']);
         Route::get('event/ticket/use/{id}', [EventController::class,'ticket_use']);
