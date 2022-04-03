@@ -104,7 +104,8 @@ class CartController extends Controller
                                 ->first();
            if ($cart) {
                $cart->update([
-                    'qty' => $cart->qty + 1
+                    'qty' => $cart->qty + $request->qty,
+                    'notes' => $request->notes
                ]);
            }else{               
                 $cart= Cart::create([

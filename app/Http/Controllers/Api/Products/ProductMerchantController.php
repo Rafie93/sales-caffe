@@ -78,13 +78,13 @@ class ProductMerchantController extends Controller
                $available_display .= $store->store_name.' ';
             }
             $output[] = array(
-                'type' => 'merchant',
+                'type' => 2,
                 'name' => $row->name,
                 'code' => $row->code,
                 'description' => $row->description,
                 'category_id' => strval($row->category_id),
                 'price_sales' => intval($row->price_sales),
-                'point_cashback' => strval($row->point_cashback),
+                'point_cashback' => intval($row->point_cashback),
                 'time_duration' => strval($row->time_duration),
                 'long_delivery' => intval($row->long_delivery),
                 'weight' => doubleval($row->weight),
@@ -140,13 +140,13 @@ class ProductMerchantController extends Controller
             
             $available_display = $row->stores->name;
             $output[] = array(
-                'type' => 'store',
+                'type' => 1,
                 'name' => $row->name,
                 'code' => $row->code,
                 'description' => $row->description,
                 'category_id' => strval($row->category_id),
                 'price_sales' => intval($row->price_sales),
-                'point_cashback' => strval($row->point_cashback),
+                'point_cashback' => intval($row->point_cashback),
                 'time_duration' => strval($row->time_duration),
                 'long_delivery' => intval($row->long_delivery),
                 'weight' => doubleval($row->weight),
