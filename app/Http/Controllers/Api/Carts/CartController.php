@@ -20,8 +20,10 @@ class CartController extends Controller
         $output = array();
         foreach ($cart as $row) {
             $output[] = array(
-                'id' => $row->id,
-                'product_id' => $row->id,
+                'id' => intval($row->id),
+                'product_id' => intval($row->product_id),
+                'store_id' => intval($row->store_id),
+                'store_name' => $row->stores->name,
                 'product_name' => $row->products->name,
                 'product_price' => intval($row->products->price_sales),
                 'price_item' => intval($row->price_item),
@@ -30,6 +32,7 @@ class CartController extends Controller
                 'qty'=> intval($row->qty),
                 'subtotal' => intval($row->subtotal),
                 'notes' => $row->notes,
+                'cover' => $row->products->cover(),
                 'product_variant' => json_decode($row->product_variant)
             );
         }

@@ -142,7 +142,8 @@ class Product extends Model
         $prod = Product::where('code',$code)->first();
         $storeId = $prod->store_id;
         $cover = $prod->cover;
-        return $cover==null ? 'Tidak Ada Image' : asset('/storage/images/product/'.$storeId.'/'.$prod->id.'/'.$cover);
+        return $this->cover==null ? 'Tidak Ada Image' : asset('images/product/'.$this->cover);
+
     }
 
     public function storeAvailables($code)
