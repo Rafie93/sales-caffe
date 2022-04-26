@@ -86,6 +86,17 @@ class CartController extends Controller
         if ($validator->fails()) {
             return response()->json(array("errors"=>validationErrors($validator->errors())), 422);
         }
+        $cartOtherStore = Cart::where('status',1)
+                        ->where('user_id',auth()->user()->id)
+                        ->where('store_id','!=',$request->storeid)
+                        ->get();
+
+        if ($cartOtherStore->count() > 0) {
+            return response()->json([
+                'success'=>false,
+                'message'=>'Oppss ! You can only add product from one store'
+            ], 400);
+        }
 
         $products =  Product::find($request->productid);
         if (!$products) {
@@ -211,6 +222,17 @@ class CartController extends Controller
         return response()->json([
             'success'=>true,
             'message'=>'Produk sudah dihapus dari daftar keranjang',
+        ], 200);
+    }
+
+    public function delete_all(Request $request)
+    {
+        $cart = Cart::where('status',1)
+                    ->where('user_id',auth()->user()->id)
+                    ->delete();
+        return response()->json([
+            'success'=>true,
+            'message'=>'Semua Produk sudah dihapus dari daftar keranjang',
         ], 200);
     }
 }

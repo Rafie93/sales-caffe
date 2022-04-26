@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Sales\SaleItem;
 use App\Http\Resources\Sales\SaleList;
 use App\Models\Stores\StoreTable;
+use App\Models\Carts\Cart;
+
 
 class SalesController extends Controller
 {
@@ -203,6 +205,12 @@ class SalesController extends Controller
                         $detail->subtotal = (($price-$price_promo) + $price_variant) * $qty;
                         $detail->notes = $notes;
                         $detail->save();
+
+                        Cart::where('status',1)
+                            ->where('user_id',auth()->user()->id)
+                            ->update([
+                                'status' => 2
+                            ]);
 
                         $menu_product_name .= $detail->qty." x ".$detail->products->name."\n";
                     }

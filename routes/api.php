@@ -100,6 +100,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::post('cart/store', [CartController::class,'store']);
         Route::post('cart/update/{id}', [CartController::class,'update']);
         Route::post('cart/delete/{id}', [CartController::class,'delete']);
+        Route::get('cart/delete_all', [CartController::class,'delete_all']);
 
     });
 });
