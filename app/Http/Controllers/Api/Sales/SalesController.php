@@ -50,7 +50,7 @@ class SalesController extends Controller
         $saleId = $request->id;
         $sales = Sale::where('id',$saleId)->first();
 
-        if (!$sales) {
+        if ($sales) {
             return response()->json([
                 'success'=>true,
                 'data'=>new SaleItem($sales)
