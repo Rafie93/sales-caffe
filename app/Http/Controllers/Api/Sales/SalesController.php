@@ -49,20 +49,26 @@ class SalesController extends Controller
     {
         $saleId = $request->id;
         $sales = Sale::where('id',$saleId)->first();
-        $detail = SalesDetail::where('sale_id',$saleId)->get();
-        
-        if ($sales) {
+
+        if (!$sales) {
             return response()->json([
                 'success'=>true,
                 'data'=>new SaleItem($sales)
             ], 200);
         }else{
-            return response()->json([
-                'success'=>false,
-                'data'=>null
-            ], 200);
-        }
-       
+            $sales = Sale::where('number',$saleId)->first();
+            if ($sales) {
+                return response()->json([
+                    'success'=>true,
+                    'data'=>new SaleItem($sales)
+                ], 200);
+            }else{
+                return response()->json([
+                    'success'=>false,
+                    'data'=>null
+                ], 200);
+            }
+        }       
     }
 
     

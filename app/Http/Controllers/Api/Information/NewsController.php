@@ -24,7 +24,7 @@ class NewsController extends Controller
         if ($news) {
             return new ItemResource($news);
         }else{
-            return response()->json(['data'=>null], 200);
+        return response()->json(['data'=>null], 200);
     
         }
     }
