@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="form-group @error('birthday') has-error @enderror">
                                         <label class="form-label">Birthday</label>
-                                        <input type="text" 
+                                        <input type="date" 
                                             class="form-control tanggal @error('birthday') is-invalid @enderror" 
                                             placeholder="" 
                                             name="birthday"

@@ -1,6 +1,111 @@
 <?php
 
 use App\Models\User;
+use App\Models\Sales\Sale;
+use App\Models\Sales\SalesDetail;
+
+function orderTodayIn()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    if ($role==11) {
+      $total =  Sale::where('date',date('Y-m-d'))->get()->count();
+    }else{
+        $store_id = auth()->user()->store_id;
+        $total =  Sale::where('date',date('Y-m-d'))
+                    ->where('store_id',$store_id)
+                    ->get()->count();
+
+    }
+    return $total;
+}
+function orderMonthIn()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    if ($role==11) {
+      $total =  Sale::where('date','LIKE','%'.date('Y-m').'%')->get()->count();
+    }else{
+        $store_id = auth()->user()->store_id;
+        $total =  Sale::where('date','LIKE','%'.date('Y-m').'%')
+                    ->where('store_id',$store_id)
+                    ->get()->count();
+
+    }
+    return $total;
+}
+function pendapatanTodayIn()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    if ($role==11) {
+      $total =  Sale::where('date',date('Y-m-d'))->get()->sum('grand_total');
+    }else{
+        $store_id = auth()->user()->store_id;
+        $total =  Sale::where('date',date('Y-m-d'))
+                    ->where('store_id',$store_id)
+                    ->get()->sum('grand_total');
+
+    }
+    return $total;
+}
+function pendapatanMonthIn()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    if ($role==11) {
+      $total =  Sale::where('date','LIKE','%'.date('Y-m').'%')->get()->sum('grand_total');
+    }else{
+        $store_id = auth()->user()->store_id;
+        $total =  Sale::where('date','LIKE','%'.date('Y-m').'%')
+                    ->where('store_id',$store_id)
+                    ->get()->sum('grand_total');
+
+    }
+    return $total;
+}
+
+function memberTotal()
+{
+    $users = 0;
+    if (auth()->user()->IN_STORE()) {
+        $member_id = Sale::select('member_id')
+                    ->where('store_id',auth()->user()->store_id)
+                    ->get()
+                    ->toArray();
+                    
+        $users = User::where('role',15)
+                    ->whereIn('id',$member_id)
+                    ->get()
+                    ->count();
+
+    }else{
+         $users = User::orderBy('id','desc')
+                    ->where('role',15)
+                    ->get()
+                    ->count();
+    }
+    return $users;
+}
+
+function productSold()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    if ($role==11) {
+      $total =  SalesDetail::where('date',date('Y-m-d'))->get()->sum('total_item');
+    }else{
+        $store_id = auth()->user()->store_id;
+        $total =  SalesDetail::where('date',date('Y-m-d'))
+                    ->where('store_id',$store_id)
+                    ->get()->sum('total_item');
+
+    }
+    return $total;
+}
+{
+    # code...
+}
 
 function validationErrors($errors)
 {

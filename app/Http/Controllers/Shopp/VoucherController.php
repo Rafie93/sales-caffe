@@ -50,13 +50,13 @@ class VoucherController extends Controller
         DB::commit();
         return redirect()->route('voucher')->with('message','Voucher Berhasil dibuat');
     }
-      public function update(Request $request)
+      public function update(Request $request,$id)
     {
          $this->validate($request,[
             'start_date' => 'required|date',
             'expired_at' => 'required|date',
             'amount'=> 'required|numeric',
-            'code'=>'required|unique:store_voucher',
+            'code'=>'required',
             'name'=>'required',
             'amount_type'=>'required'
         ]);

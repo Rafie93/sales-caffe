@@ -137,4 +137,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Stores\Store','store_id');
     }
+
+    public function sales()
+    {
+        return $this->hasMany('App\Models\Sales\Sale','member_id');
+    }
 }

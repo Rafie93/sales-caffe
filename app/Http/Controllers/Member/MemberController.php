@@ -27,4 +27,11 @@ class MemberController extends Controller
         }
         return view('member.index',compact('users'));
     }
+
+    public function view(Request $request,$id)
+    {
+        $user = User::find($id);
+        return view('member.view',compact('user'));
+
+    }
 }

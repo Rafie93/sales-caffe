@@ -142,7 +142,7 @@ class Product extends Model
         $prod = Product::where('code',$code)->first();
         $storeId = $prod->store_id;
         $cover = $prod->cover;
-        return $this->cover==null ? 'Tidak Ada Image' : asset('images/product/'.$this->cover);
+        return $cover==null ? 'Tidak Ada Image' : asset('images/product/'.$cover);
 
     }
 

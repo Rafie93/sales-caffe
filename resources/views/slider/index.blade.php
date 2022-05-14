@@ -65,7 +65,7 @@
                                     <img src="{{$row->slide()}}" height="100px" alt="" srcset="">
                                 </td>
                                 <td>{{$row->title}}</td>
-                                <td>{{$row->description}}</td>
+                                <td>{!!$row->description!!}</td>
                                 <td>
                                      <a href="{{Route('slider.edit',$row->id)}}" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i> Edit</a>
                                      <a href="#" class="btn btn-danger delete"  r-name="{{ $row->title}}" r-id="{{ $row->id }}">

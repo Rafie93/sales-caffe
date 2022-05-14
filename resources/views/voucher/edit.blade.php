@@ -33,7 +33,7 @@
                                     </div>
 
                                       <div class="form-group @error('name') has-error @enderror">
-                                        <label class="form-label">Nama Voucer *</label>
+                                        <label class="form-label">Nama Voucher</label>
                                         <input type="text" class="form-control"
                                         placeholder="" name="name" required value="{{old('name') ? old('name') : $data->name}}">
                                         @error('name')
@@ -45,7 +45,7 @@
 
                                     <div class="form-group @error('start_date') has-error @enderror">
                                         <label class="form-label">Tanggal Mulai*</label>
-                                        <input type="date" class="form-control" data-date="" data-date-format="DD-MM-YYYY" 
+                                        <input type="date" class="form-control" 
                                         placeholder="" name="start_date" required value="{{old('start_date') ? old('start_date') : $data->start_date}}">
                                         @error('start_date')
                                                 <span class="help-block" role="alert">
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="form-group @error('expired_at') has-error @enderror">
                                         <label class="form-label">Tanggal Berakhir*</label>
-                                        <input type="date" class="form-control" data-date="" data-date-format="DD-MM-YYYY" 
+                                        <input type="date" class="form-control" 
                                         placeholder="" name="expired_at" required value="{{old('expired_at') ? old('expired_at') : $data->expired_at}}">
                                         @error('expired_at')
                                                 <span class="help-block" role="alert">
@@ -112,7 +112,7 @@
                                 <div class="card-body">
                                     <div class="form-group @error('description') has-error @enderror">
                                         <label class="form-label">Deskripsi</label>
-                                        <textarea name="description" id="editor" class="form-control">{{old('description')}}</textarea>
+                                        <textarea name="description" id="editor" class="form-control">{{old('description') ? old('description') : $data->description}}</textarea>
                                         @error('description')
                                                 <span class="help-block" role="alert">
                                                     <strong>{{ $message }}</strong>

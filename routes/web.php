@@ -42,6 +42,12 @@ Route::get('payments/unfinish', [PaymentController::class,'unfinish']);
 Auth::routes();   
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/getSalesHarian', [DashboardController::class, 'getSalesHarian'])->name('dashboard.getSalesHarian');
+Route::get('/dashboard/getSalesBulanan', [DashboardController::class, 'getSalesBulanan'])->name('dashboard.getSalesBulanan');
+
+Route::get('/dashboard/getPenjualanProductYearly', [DashboardController::class, 'getPenjualanProductYearly'])->name('dashboard.getPenjualanProductYearly');
+Route::get('/dashboard/getPenjualanProductMonthly', [DashboardController::class, 'getPenjualanProductMonthly'])->name('dashboard.getPenjualanProductMonthly');
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/profile', [ProfileController::class, 'index'])->name('myprofile');
 Route::get('/profile/change', [ProfileController::class, 'change'])->name('profile.change');
@@ -62,6 +68,7 @@ Route::get('/order/detail/{id}', [OrderController::class, 'detail'])->name('orde
 
 
 Route::get('/member', [MemberController::class, 'index'])->name('member');
+Route::get('/member/view/{id}', [MemberController::class, 'view'])->name('member.view');
 
 Route::get('/event/list', [EventController::class, 'index'])->name('event.list');
 Route::get('/event/running', [EventController::class, 'running'])->name('event.running');

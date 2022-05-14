@@ -73,7 +73,28 @@ class Sale extends Model
     }
     public function is_status()
     {
-        return $this->status;
+        $s =  $this->status;
+        switch ($s) {
+            case 0:
+                return "Draft";
+                break;
+            case 1:
+                return "Waiting Payment";
+                break;
+            case 2:
+                return "Prepare Order";
+                break;
+            case 3:
+                return "Delivery Product /  Ready To Pickup";
+                break;
+            case 4:
+                return "Order Diterima";
+                break;
+            
+            default:
+                return "";
+                break;
+        }
     }
     public function member()
     {

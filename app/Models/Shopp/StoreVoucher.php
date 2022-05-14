@@ -22,7 +22,9 @@ class StoreVoucher extends Model
         "expired_at",
         "status",
         "minimum_shopp",
-        "image"
+        "image",
+        "description",
+        "start_date"
     ];
     public function sales()
     {

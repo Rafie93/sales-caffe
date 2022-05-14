@@ -77,8 +77,8 @@ class NewsController extends Controller
         $news = News::find($id);
         $news->update($request->all());
          if ($request->hasFile('file')) {
-            $image_path = public_path().'/images/news/'.$news->cover;
-            unlink($image_path);
+            // $image_path = public_path().'/images/news/'.$news->cover;
+            // unlink($image_path);
             
             $originName = $request->file('file')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
@@ -93,8 +93,8 @@ class NewsController extends Controller
     public function delete($id)
     {
         $news=News::find($id);
-        $image_path = public_path().'/images/news/'.$news->cover;
-        unlink($image_path);
+        // $image_path = public_path().'/images/news/'.$news->cover;
+        // unlink($image_path);
         $news->delete();
         return redirect()->route('news')->with('message','Berhasil dihapus');
     }

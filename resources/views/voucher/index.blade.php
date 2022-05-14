@@ -70,7 +70,7 @@
                                 <td><strong> {{$row->code}} </strong><br> {{$row->name}}  </td>
                                 <td>{{$row->amount_type}}</td>
                                 <td align="right">{{$row->amount}}</td>
-                                <td align="center">{{$row->expired_at}}</td>
+                                <td align="center">{{$row->start_date." s/d ".$row->expired_at}}</td>
                                 <td align="center">{{$row->is_status()}}</td>
                                 <td align="center">
                                     {{$row->sales->count()}}

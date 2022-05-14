@@ -68,7 +68,7 @@
                                     <td>{{$row->gender}}</td>
                                     <td>{{$row->IS_STATUS()}}</td>
                                     <td>
-                                        <a href="#" class="btn btn-warning">
+                                        <a href="{{Route('member.view',$row->id)}}" class="btn btn-warning">
                                             <i class="glyphicon glyphicon-list"></i> View (Log)</a>
                                     </td>
                                 </tr>
