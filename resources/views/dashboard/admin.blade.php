@@ -183,13 +183,9 @@
 @endsection
 @section('script')
     <script src="assets/js/lib/chart-js/Chart.bundle.js"></script>
-    <script src="assets/js/lib/chart-js/chartjs-init.js"></script>
+    {{-- <script src="assets/js/lib/chart-js/chartjs-init.js"></script> --}}
     <!-- // Chart js -->
     <!--  Datamap -->
-    <script src="assets/js/lib/datamap/d3.min.js"></script>
-    <script src="assets/js/lib/datamap/topojson.js"></script>
-    <script src="assets/js/lib/datamap/datamaps.world.min.js"></script>
-    <script src="assets/js/lib/datamap/datamap-init.js"></script>
     <script src="assets/lib/lobipanel/js/lobipanel.js"></script>
     <script src="assets/js/scripts.js"></script>
     <script
