@@ -11,6 +11,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+        $sales = Sale::orderBy('id','desc')->where('store_id',auth()->user()->store_id)->paginate(20);
         return view('order.index');
     }
     public function detail(Request $request,$id)
@@ -62,5 +63,31 @@ class OrderController extends Controller
 
 
         return redirect()->route('order')->with('message','Status Pesanan di Perbaharui');
+    }
+
+    public function getDataSales()
+    {
+       $sale =  Sale::orderBy('id','asc')
+                    ->where('payment_status','paid')
+                    ->whereIn('status',[2,3])
+                    ->where('store_id',auth()->user()->store_id)
+                    ->get();
+       $output = array();
+       foreach ($sale as $key => $row) {
+           $output[] = array(
+                'id' => $row->id,
+                'number' => $row->number,
+                'customer' => $row->member->fullname,
+                'date' => $row->date,
+                'menu_product' => $row->detail->count(),
+                'grand_total' => $row->grand_total,
+                'service' => $row->service,
+                'status' => intval($row->status),
+                'status_order' => statusOrder($row->status),
+                'status_payment' => $row->payment_status,
+                'detail' => $row->detail
+           );
+       }
+       return response()->json($output);
     }
 }

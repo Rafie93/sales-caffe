@@ -65,6 +65,7 @@ Route::get('/order/process', [OrderController::class, 'index'])->name('order');
 Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
 Route::post('/order/update', [OrderController::class, 'update'])->name('order.update');
 Route::get('/order/detail/{id}', [OrderController::class, 'detail'])->name('order.detail');
+Route::get('/order/getDataSales', [OrderController::class, 'getDataSales'])->name('order.getDataSales');
 
 
 Route::get('/member', [MemberController::class, 'index'])->name('member');

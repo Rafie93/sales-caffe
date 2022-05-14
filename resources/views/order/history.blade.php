@@ -49,7 +49,7 @@
                                                     <td>{{$row->service}}</td>
                                                     <td>{!! $row->payment_status !!}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-info viewData"><i class="glyphicon glyphicon-eye-open"></i> Detail</a>                
+                                                        <a href="{{Route('order.detail',$row->id)}}" class="btn btn-info viewData"><i class="glyphicon glyphicon-eye-open"></i> Detail</a>                
                                                     </td>
                                                 </tr>
                                             @endforeach

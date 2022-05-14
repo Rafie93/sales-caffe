@@ -34,7 +34,8 @@
                                             <th>Menu Product</th>
                                             <th>Grand Total</th>
                                             <th>Service</th>
-                                            <th>Status</th>
+                                            <th>Status Payment</th>
+                                            <th>Status Order</th>
                                             <th>Aksi</th>
                                         </tr>
                                         </thead>
@@ -84,23 +85,23 @@
                         </tr>
                         <tr class="delivery">
                             <td>Shipping</td>
-                            <td><span id="txtShipping"></span></td>
+                            <td style="text-align: left"><span id="txtShipping"></span></td>
                         </tr>
                         <tr>
                             <td>Alamat / Meja </td>
-                            <td>
+                            <td style="text-align: left">
                                 <input type="text" readonly class="form-control" id="addr_meja">
                             </td>
                         </tr>
                     </tbody>
                 </table>
             
-                <table class="table table-responsive table-bordered">
+                <table class="table table-responsive table-bordered" id="table_product">
                     <thead>
                         <tr>
                             <td>No</td>
                             <td>Name</td>
-                            <td>Variant</td>
+                            <td>Price</td>
                             <td>QTY</td>
                             <td>Note</td>
                         </tr>
@@ -123,7 +124,70 @@
 @endsection
 @section('script')
     <script>
+        $(document).ready(function(){
+             getDataSales()
+            setInterval(function(){
+                getDataSales()
+            }, 30000)
+        });
+
+        function getDataSales(){
+            $.ajax({
+                url: "{{ route('order.getDataSales') }}",
+                method: "GET",
+                success: function(data) {
+                    console.log(data);
+                    var htmls = [];
+                    $.each(data, function(index, value) {
+                    if(value) {
+                        var s = value.status;
+                        var status = value.status_order;
+                        var status_payment = value.status_payment;
+                        if (status=="Wait Payment") {
+                            status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
+                        }else if (status=="Prepare Order") {
+                            status = '<span  class="btn btn-rounded btn-warning">Prepare Order	</span>';
+                        }else if (status=="Delivery") {
+                            status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
+                        }else if (status=="Ready To Pick") {
+                            status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
+                        }else if (status=="Order Accepted") {
+                            status = '<span  class="btn btn-rounded btn-success">Order Accepted</span>';
+                        }else if (status=="Canceled") {
+                            status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
+                        }
+                        else{
+                            status = '<span  class="btn btn-rounded btn-default">'+value.status+'</span>';
+                        }
+                        if(status_payment=="paid"){
+                            status_payment = '<span  class="btn btn-rounded btn-success">PAID</span>';
+                        }else{
+                            status_payment = '<span  class="btn btn-rounded btn-warning">UNPAID</span>';
+                        }
+                        htmls.push('<tr>\
+                        <td>'+ value.customer +'</td>\
+                        <td>'+ value.number +'</td>\
+                        <td>'+ value.date +'</td>\
+                        <td style="text-align:center">'+ value.menu_product +'</td>\
+                        <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
+                        <td>'+ value.service +'</td>\
+                        <td>'+ status_payment +'</td>\
+                        <td>'+ status +'</td>\
+                        <td>\
+                            <a style="width:100px" href="/order/detail/'+value.id+'" class="btn btn-info" data-id="'+value.id+'"><i class="glyphicon glyphicon-eye-open"></i> View</a>\
+                            <a style="width:100px" href="javascript:void(0)" onclick="updateOrder('+value.id+')" class="btn btn-primary updateData" data-id="'+value.id+'"><i class="glyphicon glyphicon-edit"></i> Update</a>\
+                        </td>\
+                        </tr>');
+                      }
+                     lastIndex = index;
+                    });
+                    $('#tbody').html(htmls);
+                    $("#submitUser").removeClass('desabled');                    
+                }
+            });
+        }
         function updateOrder(id){
+
             $("#modalUpdate").modal('show',{backdrop: 'true'});
             $("#exampleModalLabel").html(id);
             $.get(
@@ -132,13 +196,28 @@
                     id: id,
                 },
                 function(data) {
-                    console.log(data.data);
                     $("#exampleModalLabel").html(data.data['number']);
                     $("#id").val(id);
-                    let addr = data.data['address'];
+                    let addr = data.data['address']+", "+data.data['destination'];
                     let seat = data.data['seat'];
                     let service = data.data['service'];
-                    let status = data.data['status'];
+                    let status_old = data.data['status'];
+                    let product = data.data['detail'];
+                    // console.log(product);
+                    let status = parseInt(status_old);
+
+                    $myIsi = "";
+                    $.each(product, function(index, value) {
+                        $myIsi = '<tr>\
+                            <td>'+ (index+1) +'</td>\
+                            <td>'+ value.product_name +'</td>\
+                            <td>'+ value.price +'</td>\
+                            <td>'+ value.qty +'</td>\
+                            <td>'+ value.notes +'</td>\
+                        </tr>';
+                        $("#table_product tbody").html($myIsi);
+                    });
+
                     var bad_status = ""
                     if(status==1){
                         bad_status = "Waiting Payment";
@@ -180,6 +259,9 @@
                         $isi +='<option value="4">Order Accepted</option>'+
                                 '<option value="5">Cancel</option>';
                     }
+
+                
+
                     $("#status").html($isi);
 
                     // $.each(data.detail, function(index, value) {
@@ -192,48 +274,48 @@
        
         	//DATABASE REALTIME
 			// Get Data Order store
-            var storeId = <?php echo Auth()->user()->store_id ?> ;
-			firebase.database().ref('orders/store-'+storeId).on('value', function(snapshot) {
-                var value = snapshot.val();
-                var htmls = [];
-                $.each(value, function(index, value){
-                if(value) {
-                    var status = value.status;
-                    if (status=="Wait Payment") {
-                        status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
-                    }else if (status=="Prepare Order") {
-                        status = '<span  class="btn btn-rounded btn-warning">Prepare Order	</span>';
-                    }else if (status=="Delivery") {
-                        status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
-                    }else if (status=="Ready To Pick") {
-                        status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
-                    }else if (status=="Order Accepted") {
-                        status = '<span  class="btn btn-rounded btn-success">Order Accepted</span>';
-                    }else if (status=="Canceled") {
-                        status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
-                    }
-                    else{
-                        status = '<span  class="btn btn-rounded btn-default">'+value.status+'</span>';
-                    }
-                htmls.push('<tr>\
-                <td>'+ value.customer_name +'</td>\
-                <td>'+ value.number +'</td>\
-                <td>'+ value.date +'</td>\
-                <td>'+ value.menu_name +'</td>\
-                <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
-                <td>'+ value.service +'</td>\
-                <td>'+ status +'</td>\
-                <td>\
-                    <a href="/order/detail/'+value.id+'" class="btn btn-info" data-id="'+value.id+'"><i class="glyphicon glyphicon-eye-open"></i> View</a>\
-                    <a href="javascript:void(0)" onclick="updateOrder('+value.id+')" class="btn btn-primary updateData" data-id="'+value.id+'"><i class="glyphicon glyphicon-edit"></i> Update</a>\
-                </td>\
-                </tr>');
-                }    	
-                lastIndex = index;
-                });
-                $('#tbody').html(htmls);
-                $("#submitUser").removeClass('desabled');
-			});
+            // var storeId = <?php echo Auth()->user()->store_id ?> ;
+			// firebase.database().ref('orders/store-'+storeId).on('value', function(snapshot) {
+            //     var value = snapshot.val();
+            //     var htmls = [];
+            //     $.each(value, function(index, value){
+            //     if(value) {
+            //         var status = value.status;
+            //         if (status=="Wait Payment") {
+            //             status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
+            //         }else if (status=="Prepare Order") {
+            //             status = '<span  class="btn btn-rounded btn-warning">Prepare Order	</span>';
+            //         }else if (status=="Delivery") {
+            //             status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
+            //         }else if (status=="Ready To Pick") {
+            //             status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
+            //         }else if (status=="Order Accepted") {
+            //             status = '<span  class="btn btn-rounded btn-success">Order Accepted</span>';
+            //         }else if (status=="Canceled") {
+            //             status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
+            //         }
+            //         else{
+            //             status = '<span  class="btn btn-rounded btn-default">'+value.status+'</span>';
+            //         }
+            //     htmls.push('<tr>\
+            //     <td>'+ value.customer_name +'</td>\
+            //     <td>'+ value.number +'</td>\
+            //     <td>'+ value.date +'</td>\
+            //     <td>'+ value.menu_name +'</td>\
+            //     <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
+            //     <td>'+ value.service +'</td>\
+            //     <td>'+ status +'</td>\
+            //     <td>\
+            //         <a href="/order/detail/'+value.id+'" class="btn btn-info" data-id="'+value.id+'"><i class="glyphicon glyphicon-eye-open"></i> View</a>\
+            //         <a href="javascript:void(0)" onclick="updateOrder('+value.id+')" class="btn btn-primary updateData" data-id="'+value.id+'"><i class="glyphicon glyphicon-edit"></i> Update</a>\
+            //     </td>\
+            //     </tr>');
+            //     }    	
+            //     lastIndex = index;
+            //     });
+            //     $('#tbody').html(htmls);
+            //     $("#submitUser").removeClass('desabled');
+			// });
 			
 			
 			// Add Data
