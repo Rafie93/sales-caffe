@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Events\Event;
 use Image;
+use App\Models\Sales\Sale;
+use App\Models\Sales\SalesEvent;
+use App\Models\Events\ETicket;
 
 class EventController extends Controller
 {
@@ -21,6 +24,12 @@ class EventController extends Controller
     {
         $events = Event::where('store_id',auth()->user()->store_id);
         return view("events.running",compact('events'));
+    }
+    public function tiket(Request $request,$id)
+    {
+        $events = SalesEvent::where('id',$id)->first();
+        $tiket = ETicket::where('sales_event_id',$id)->get();
+        return view("events.tiket",compact('events','tiket'));
     }
 
      public function create(Request $request)
@@ -84,5 +93,38 @@ class EventController extends Controller
     public function delete($id)
     {
         
+    }
+
+    public function getDataSalesEvent()
+    {
+       $sale =  Sale::orderBy('id','desc')
+                    ->where('payment_status','paid')
+                    ->where('type_sales',3)
+                    ->whereIn('status',[2,3,4,6])
+                    ->where('store_id',auth()->user()->store_id)
+                    ->get();
+       $output = array();
+       foreach ($sale as $key => $row) {
+           $event = SalesEvent::where('sale_id',$row->id)->first();
+           $tiket = ETicket::where('sales_event_id',$event->id)->get()->count();
+           $output[] = array(
+                'id' => $row->id,
+                'number' => $row->number,
+                'customer' => $row->member->fullname,
+                'date' => $row->date,
+                'sales_event_id' => $event->id,
+                'menu_product' => $event->qty." x ".$event->event->name,
+                'product_date' => $event->event->date.' '.$event->event->date_end,
+                'grand_total' => number_format($row->grand_total),
+                'service' => $row->service,
+                'resi_no' => $row->resi_no,
+                'status' => intval($row->status),
+                'status_order' => statusOrder($row->status),
+                'status_payment' => $row->payment_status,
+                'is_ticket' => $tiket==0 ? 'E-Ticket Belum Terbit' : 'E-Ticket Terbit',
+                'detail' => $event
+           );
+       }
+       return response()->json($output);
     }
 }

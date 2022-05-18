@@ -67,6 +67,9 @@ Route::post('/order/update', [OrderController::class, 'update'])->name('order.up
 Route::get('/order/detail/{id}', [OrderController::class, 'detail'])->name('order.detail');
 Route::get('/order/getDataSales', [OrderController::class, 'getDataSales'])->name('order.getDataSales');
 
+Route::get('/order/bundle', [OrderController::class, 'bundle'])->name('order.bundle');
+Route::get('/order/getDataSalesBundle', [OrderController::class, 'getDataSalesBundle'])->name('order.getDataSalesBundle');
+
 
 Route::get('/member', [MemberController::class, 'index'])->name('member');
 Route::get('/member/view/{id}', [MemberController::class, 'view'])->name('member.view');
@@ -78,6 +81,8 @@ Route::post('/event/store', [EventController::class, 'store'])->name('event.stor
 Route::get('/event/{id}/delete', [EventController::class, 'delete']);
 Route::get('/event/{id}/edit', [EventController::class, 'edit'])->name('event.edit');
 Route::post('/event/{id}/update', [EventController::class, 'update'])->name('event.update');
+Route::get('/event/getDataSalesEvent', [EventController::class, 'getDataSalesEvent'])->name('event.getDataSalesEvent');
+Route::get('/event/tiket/{id}', [EventController::class, 'tiket'])->name('event.tiket');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');

@@ -73,12 +73,7 @@
 
 	<script>
 		 $( function() {
-			$( ".tanggal" ).datepicker({
-					format: 'yyyy-mm-dd',
-				});
-			$( ".tanggal-time" ).datetimepicker({
-				format: 'YYYY-MM-DD HH:mm:ss'
-				} );
+			
 		  } );
          $('.select2').select2();
 	</script>
@@ -181,7 +176,7 @@
 		@endif
 	</script>
 	<script>
-			 var storeId = <?php echo Auth()->user()->store_id ?> ;
+			 var storeId =  "{{auth()->user()->store_id}}";
 			firebase.database().ref('notification/store-'+storeId).orderByChild('is_read').equalTo("belum")
 				.on('value', function(snapshot) {
                 var value = snapshot.val();

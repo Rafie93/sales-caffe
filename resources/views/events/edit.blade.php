@@ -47,7 +47,7 @@
 
                                     <div class="form-group @error('date') has-error @enderror">
                                         <label class="form-label">Tanggal Mulai Event</label>
-                                        <input type="text" class="form-control tanggal" data-date="" data-date-format="DD-MM-YYYY" 
+                                        <input type="date" class="form-control tanggal" data-date="" data-date-format="DD-MM-YYYY" 
                                         placeholder="" name="date" required value="{{old('date') ? old('date') : $data->date}}">
                                         @error('date')
                                                 <span class="help-block" role="alert">
@@ -58,7 +58,7 @@
 
                                     <div class="form-group @error('date_end') has-error @enderror">
                                         <label class="form-label">Tanggal Berakhir Event</label>
-                                        <input type="text" class="form-control tanggal" data-date="" data-date-format="DD-MM-YYYY" 
+                                        <input type="date" class="form-control tanggal" data-date="" data-date-format="DD-MM-YYYY" 
                                         placeholder="" name="date_end" required value="{{old('date_end') ? old('date_end') : $data->date_end}}">
                                         @error('date_end')
                                                 <span class="help-block" role="alert">

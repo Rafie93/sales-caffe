@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Sales\Sale;
 use App\Models\Sales\SalesDetail;
+use App\Models\Stores\StoreTable;
 
 function orderTodayIn()
 {
@@ -17,6 +18,32 @@ function orderTodayIn()
                     ->get()->count();
 
     }
+    return $total;
+}
+function mejaReady()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    
+    $store_id = auth()->user()->store_id;
+    $total =  StoreTable::where('is_ready',1)
+                ->where('store_id',$store_id)
+                ->get()->count();
+
+
+    return $total;
+}
+function mejaNotReady()
+{
+    $role = auth()->user()->role;
+    $total = 0;
+    
+    $store_id = auth()->user()->store_id;
+    $total =  StoreTable::where('is_ready',0)
+                ->where('store_id',$store_id)
+                ->get()->count();
+
+
     return $total;
 }
 function orderMonthIn()

@@ -82,6 +82,11 @@
                                             <td>:</td>
                                             <td style="text-align: left">{{$sales->shipping_method}}</td>
                                         </tr>
+                                        <tr>
+                                            <td>No Resi</td>
+                                            <td>:</td>
+                                            <td style="text-align: left">{{$sales->resi_no}}</td>
+                                        </tr>
                                     @elseif ($sales->service == 'take_away')
                                         <tr>
                                             <td>Tanggal Dan Jam Pengambilan</td>

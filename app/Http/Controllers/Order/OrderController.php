@@ -25,6 +25,12 @@ class OrderController extends Controller
         return view('order.history',compact('sales'));
     }
 
+    public function bundle(Request $request)
+    {
+        $sales = Sale::orderBy('id','desc')->where('store_id',auth()->user()->store_id)->paginate(20);
+        return view('order.bundle');
+    }
+
     public function update(Request $request)
     {
         $this->validate($request,[
@@ -34,7 +40,8 @@ class OrderController extends Controller
 
         $status = $request->status;
         Sale::find($request->id)->update([
-            'status' => $status
+            'status' => $status,
+            'resi_no' => $request->resi_no
         ]);
 
         $sale = Sale::where('id',$request->id)->first();
@@ -69,6 +76,7 @@ class OrderController extends Controller
     {
        $sale =  Sale::orderBy('id','asc')
                     ->where('payment_status','paid')
+                    ->where('type_sales',1)
                     ->whereIn('status',[2,3])
                     ->where('store_id',auth()->user()->store_id)
                     ->get();
@@ -80,8 +88,37 @@ class OrderController extends Controller
                 'customer' => $row->member->fullname,
                 'date' => $row->date,
                 'menu_product' => $row->detail->count(),
-                'grand_total' => $row->grand_total,
+                'grand_total' => number_format($row->grand_total),
                 'service' => $row->service,
+                'resi_no' => $row->resi_no,
+                'status' => intval($row->status),
+                'status_order' => statusOrder($row->status),
+                'status_payment' => $row->payment_status,
+                'detail' => $row->detail
+           );
+       }
+       return response()->json($output);
+    }
+
+    public function getDataSalesBundle()
+    {
+       $sale =  Sale::orderBy('id','asc')
+                    ->where('payment_status','paid')
+                    ->where('type_sales',2)
+                    ->whereIn('status',[2,3])
+                    ->where('store_id',auth()->user()->store_id)
+                    ->get();
+       $output = array();
+       foreach ($sale as $key => $row) {
+           $output[] = array(
+                'id' => $row->id,
+                'number' => $row->number,
+                'customer' => $row->member->fullname,
+                'date' => $row->date,
+                'menu_product' => $row->detail->count(),
+                'grand_total' => number_format($row->grand_total),
+                'service' => $row->service,
+                'resi_no' => $row->resi_no,
                 'status' => intval($row->status),
                 'status_order' => statusOrder($row->status),
                 'status_payment' => $row->payment_status,

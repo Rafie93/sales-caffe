@@ -89,6 +89,7 @@ class SaleItem extends JsonResource
             'payment_expired'      => strval($this->resource->payment_expired),
             'service'      => strval($this->resource->service),
             'shipping_method' => strval($this->resource->shipping_method),
+            'resi_no' => strval($this->resource->resi_no),
             'origin_id'     => strval($this->resource->origin_id),
             'customer_name'     => strval($this->resource->customer_name),
             'customer_phone' =>  strval($this->resource->customer_phone),

@@ -5,7 +5,7 @@
                     <div class="col-lg-8 p-0">
                         <div class="page-header">
                             <div class="page-title">
-                                <h1>Ordering Proses</h1>
+                                <h1>List Ordering Product Subscription</h1>
                             </div>
                         </div>
                     </div><!-- /# column -->
@@ -22,80 +22,17 @@
                 </div><!-- /# row -->
                 <div class="main-content">
                     <div class="row">
-                        <div class="col-lg-3">
-                            <div class="card">
-                                <div class="stat-widget-two">
-                                    <div class="widget-icon color-1">
-                                        <i class="fas fa-bullseye"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-text">Pesanan Masuk Hari Ini </div>
-                                        <div class="stat-digit">{{orderTodayIn()}} Pesanan </div>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="card">
-                                <div class="stat-widget-two">
-                                    <div class="widget-icon color-1">
-                                        <i class="fas fa-tasks"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-text">Meja Tersedia </div>
-                                        <div class="stat-digit">{{mejaReady()}}  Meja </div>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="card">
-                                <div class="stat-widget-two">
-                                    <div class="widget-icon color-1">
-                                        <i class="fas fa-tasks"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-text">Meja Digunakan </div>
-                                        <div class="stat-digit">{{mejaNotReady()}} Meja </div>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="card">
-                                <div class="stat-widget-two">
-                                
-                                    <div class="stat-content">
-                                        <button class="btn btn-primary"> AKTIFKAN MEJA </button>
-                                        <button class="btn btn-seccondary"> GUNAKAN MEJA </button>
-
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-lg-12">
                             <div class="card alert">
                                 <div class="order-list-item">
-                                    <label for="">List Ordering Proses</label>
                                     <table class="table" id="listOrder">
                                         <thead>
                                         <tr>
                                             <th>Customer</th>
                                             <th>Order ID</th>
                                             <th>Date</th>
-                                            <th>Menu Product</th>
+                                            <th>Product Bundle</th>
                                             <th>Grand Total</th>
-                                            <th>Service</th>
                                             <th>Status Payment</th>
                                             <th>Status Order</th>
                                             <th>Aksi</th>
@@ -195,7 +132,7 @@
 
         function getDataSales(){
             $.ajax({
-                url: "{{ route('order.getDataSales') }}",
+                url: "{{ route('order.getDataSalesBundle') }}",
                 method: "GET",
                 success: function(data) {
                     console.log(data);
@@ -232,7 +169,6 @@
                         <td>'+ value.date +'</td>\
                         <td style="text-align:center">'+ value.menu_product +'</td>\
                         <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
-                        <td>'+ value.service +'</td>\
                         <td>'+ status_payment +'</td>\
                         <td>'+ status +'</td>\
                         <td>\
@@ -316,11 +252,11 @@
                         $isi = '<option value=""></option>';
                         $isi +='<option value="3">Delivery / Ready To Pick</option>'+
                                 '<option value="4">Order Accepted</option>'+
-                                '<option value="5">Cancel / Refund</option>';
+                                '<option value="5">Cancel</option>';
                     }else if(status==3){
                         $isi = '<option value=""></option>';
                         $isi +='<option value="4">Order Accepted</option>'+
-                                '<option value="5">Cancel / Refund</option>';
+                                '<option value="5">Cancel</option>';
                     }
 
                 
@@ -336,124 +272,6 @@
             );
         }
        
-        	//DATABASE REALTIME
-			// Get Data Order store
-            // var storeId = <?php echo Auth()->user()->store_id ?> ;
-			// firebase.database().ref('orders/store-'+storeId).on('value', function(snapshot) {
-            //     var value = snapshot.val();
-            //     var htmls = [];
-            //     $.each(value, function(index, value){
-            //     if(value) {
-            //         var status = value.status;
-            //         if (status=="Wait Payment") {
-            //             status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
-            //         }else if (status=="Prepare Order") {
-            //             status = '<span  class="btn btn-rounded btn-warning">Prepare Order	</span>';
-            //         }else if (status=="Delivery") {
-            //             status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
-            //         }else if (status=="Ready To Pick") {
-            //             status = '<span  class="btn btn-rounded btn-info">Delivery</span>';
-            //         }else if (status=="Order Accepted") {
-            //             status = '<span  class="btn btn-rounded btn-success">Order Accepted</span>';
-            //         }else if (status=="Canceled") {
-            //             status = '<span  class="btn btn-rounded btn-danger">Wait Payment</span>';
-            //         }
-            //         else{
-            //             status = '<span  class="btn btn-rounded btn-default">'+value.status+'</span>';
-            //         }
-            //     htmls.push('<tr>\
-            //     <td>'+ value.customer_name +'</td>\
-            //     <td>'+ value.number +'</td>\
-            //     <td>'+ value.date +'</td>\
-            //     <td>'+ value.menu_name +'</td>\
-            //     <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
-            //     <td>'+ value.service +'</td>\
-            //     <td>'+ status +'</td>\
-            //     <td>\
-            //         <a href="/order/detail/'+value.id+'" class="btn btn-info" data-id="'+value.id+'"><i class="glyphicon glyphicon-eye-open"></i> View</a>\
-            //         <a href="javascript:void(0)" onclick="updateOrder('+value.id+')" class="btn btn-primary updateData" data-id="'+value.id+'"><i class="glyphicon glyphicon-edit"></i> Update</a>\
-            //     </td>\
-            //     </tr>');
-            //     }    	
-            //     lastIndex = index;
-            //     });
-            //     $('#tbody').html(htmls);
-            //     $("#submitUser").removeClass('desabled');
-			// });
-			
-			
-			// Add Data
-			// $('#submitUser').on('click', function(){
-            //     var values = $("#addUser").serializeArray();
-            //     var first_name = values[0].value;
-            //     var last_name = values[1].value;
-            //     var userID = lastIndex+1;
-                
-            //     firebase.database().ref('users/' + userID).set({
-            //     first_name: first_name,
-            //     last_name: last_name,
-            //     });
-                
-            //     // Reassign lastID value
-            //     lastIndex = userID;
-            //     $("#addUser input").val("");
-			// });
-			
-			// Update Data
-			// var updateID = 0;
-			// $('body').on('click', '.updateData', function() {
-            //     updateID = $(this).attr('data-id');
-            //     firebase.database().ref('users/' + updateID).on('value', function(snapshot) {
-            //         var values = snapshot.val();
-            //         var updateData = '<div class="form-group">\
-            //         <label for="first_name" class="col-md-12 col-form-label">First Name</label>\
-            //         <div class="col-md-12">\
-            //         <input id="first_name" type="text" class="form-control" name="first_name" value="'+values.first_name+'" required autofocus>\
-            //         </div>\
-            //         </div>\
-            //         <div class="form-group">\
-            //         <label for="last_name" class="col-md-12 col-form-label">Last Name</label>\
-            //         <div class="col-md-12">\
-            //         <input id="last_name" type="text" class="form-control" name="last_name" value="'+values.last_name+'" required autofocus>\
-            //         </div>\
-            //         </div>';
-                    
-            //         $('#updateBody').html(updateData);
-            //     });
-			// });
-			
-			// $('.updateUserRecord').on('click', function() {
-            //     var values = $(".users-update-record-model").serializeArray();
-            //     var postData = {
-            //         first_name : values[0].value,
-            //         last_name : values[1].value,
-            //     };
-                
-            //     var updates = {};
-            //     updates['/users/' + updateID] = postData;
-                
-            //     firebase.database().ref().update(updates);
-                
-            //     $("#update-modal").modal('hide');
-			// });
-			
-			
-			// Remove Data
-			// $("body").on('click', '.removeData', function() {
-            //     var id = $(this).attr('data-id');
-            //     $('body').find('.users-remove-record-model').append('<input name="id" type="hidden" value="'+ id +'">');
-            // });
-                
-            // $('.deleteMatchRecord').on('click', function(){
-            //     var values = $(".users-remove-record-model").serializeArray();
-            //     var id = values[0].value;
-            //     firebase.database().ref('users/' + id).remove();
-            //     $('body').find('.users-remove-record-model').find( "input" ).remove();
-            //     $("#remove-modal").modal('hide');
-            // });
-            // $('.remove-data-from-delete-form').click(function() {
-            //     $('body').find('.users-remove-record-model').find( "input" ).remove();
-			// });
 	
 
     </script>

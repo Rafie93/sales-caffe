@@ -52,7 +52,8 @@ class Sale extends Model
         "customer_phone",
         "customer_email",
         "payment_no",
-        "payment_expired"
+        "payment_expired",
+        "resi_no"
     ];
 
     public const PAID = 'paid';

@@ -160,7 +160,12 @@ class EventController extends Controller
             'event_id' => $request->event_id,
             'phone' => $request->phone
         ],
-            $request->all()
+            [
+                'sales_event_id' =>  $request->sales_event_id,
+                'event_id' => $request->event_id,
+                'phone' => $request->phone,
+                'participant_name' => $request->participant_name,
+            ]
         );
         $tot_generate = ETicket::where("sales_event_id",$request->sales_event_id)->get()->count();
         $eventSales = SalesEvent::where('id',$request->sales_event_id)->first();

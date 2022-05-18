@@ -39,10 +39,10 @@
                             <a href="{{Route('event.running')}}"><i class="glyphicon glyphicon-calendar"></i> Events </a></li>
 
                          <li class="{{ (request()->segment(1) == 'order' ) ? 'active' : '' }} ">
-                            <a href="{{Route('order')}}"><i class="ti-shopping-cart"></i> Bundle</a></li>		
-                   
+                            <a href="{{Route('order.bundle')}}"><i class="ti-shopping-cart"></i> Product Subscription</a></li>		
+{{--                    
                          <li class="{{ (request()->segment(1) == 'event/running' ) ? 'active' : '' }} ">
-                            <a href="{{Route('event.running')}}"><i class="glyphicon glyphicon-calendar"></i> Reservation etc </a></li>   
+                            <a href="{{Route('event.running')}}"><i class="glyphicon glyphicon-calendar"></i> Reservation etc </a></li>    --}}
                     </ul>
                    <li class="{{ (request()->segment(1) == 'product' ||
                                  request()->segment(1) == 'category' || 

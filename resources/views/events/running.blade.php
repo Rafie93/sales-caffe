@@ -5,7 +5,7 @@
                     <div class="col-lg-8 p-0">
                         <div class="page-header">
                             <div class="page-title">
-                                <h1>Subscription Events Running </h1>
+                                <h1>Subscription Events </h1>
                             </div>
                         </div>
                     </div><!-- /# column -->
@@ -62,11 +62,12 @@
                                         <tr>
                                             <th>Customer</th>
                                             <th>Order ID</th>
-                                            <th>Date Event</th>
+                                            <th>Date</th>
                                             <th>Nama Event</th>
+                                            <th>Event Date</th>
                                             <th>Grand Total</th>
-                                            <th>Service</th>
                                             <th>Status</th>
+                                            <th>Ticket</th>
                                             <th>Aksi</th>
                                         </tr>
                                         </thead>
@@ -86,115 +87,58 @@
 @endsection
 @section('script')
     <script>
-        	//DATABASE REALTIME
-			// Get Data Order store
-            var storeId = <?php echo Auth()->user()->store_id ?> ;
-			firebase.database().ref('orders/store-'+storeId).on('value', function(snapshot) {
-                var value = snapshot.val();
-                var htmls = [];
-                $.each(value, function(index, value){
-                if(value) {
-                    var status = value.status;
-                    if (status=="Wait Payment") {
-                        status = '<span  class="btn btn-rounded btn-warning">Wait Payment</span>';
-                    }else if (status=="Prepare Order") {
-                        status = '<span  class="btn btn-rounded btn-info">Prepare Order	</span>';
-                    }else{
-                        status = '<span  class="btn btn-rounded btn-default">'+value.status+'</span>';
-                    }
-                htmls.push('<tr>\
-                <td>'+ value.customer_name +'</td>\
-                <td>'+ value.number +'</td>\
-                <td>'+ value.date +'</td>\
-                <td>'+ value.menu_name +'</td>\
-                <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
-                <td>'+ value.service +'</td>\
-                <td>'+ status +'</td>\
-                <td>\
-                    <a data-toggle="modal" data-target="#view-modal" class="btn btn-info viewData" data-id="'+index+'"><i class="glyphicon glyphicon-eye-open"></i> View</a>\
-                    <a data-toggle="modal" data-target="#update-modal" class="btn btn-primary updateData" data-id="'+index+'"><i class="glyphicon glyphicon-edit"></i> Update</a>\
-                </td>\
-                </tr>');
-                }    	
-                lastIndex = index;
-                });
-                $('#tbody').html(htmls);
-                $("#submitUser").removeClass('desabled');
-			});
-			
-			
-			// Add Data
-			$('#submitUser').on('click', function(){
-                var values = $("#addUser").serializeArray();
-                var first_name = values[0].value;
-                var last_name = values[1].value;
-                var userID = lastIndex+1;
-                
-                firebase.database().ref('users/' + userID).set({
-                first_name: first_name,
-                last_name: last_name,
-                });
-                
-                // Reassign lastID value
-                lastIndex = userID;
-                $("#addUser input").val("");
-			});
-			
-			// Update Data
-			var updateID = 0;
-			$('body').on('click', '.updateData', function() {
-                updateID = $(this).attr('data-id');
-                firebase.database().ref('users/' + updateID).on('value', function(snapshot) {
-                    var values = snapshot.val();
-                    var updateData = '<div class="form-group">\
-                    <label for="first_name" class="col-md-12 col-form-label">First Name</label>\
-                    <div class="col-md-12">\
-                    <input id="first_name" type="text" class="form-control" name="first_name" value="'+values.first_name+'" required autofocus>\
-                    </div>\
-                    </div>\
-                    <div class="form-group">\
-                    <label for="last_name" class="col-md-12 col-form-label">Last Name</label>\
-                    <div class="col-md-12">\
-                    <input id="last_name" type="text" class="form-control" name="last_name" value="'+values.last_name+'" required autofocus>\
-                    </div>\
-                    </div>';
-                    
-                    $('#updateBody').html(updateData);
-                });
-			});
-			
-			$('.updateUserRecord').on('click', function() {
-                var values = $(".users-update-record-model").serializeArray();
-                var postData = {
-                    first_name : values[0].value,
-                    last_name : values[1].value,
-                };
-                
-                var updates = {};
-                updates['/users/' + updateID] = postData;
-                
-                firebase.database().ref().update(updates);
-                
-                $("#update-modal").modal('hide');
-			});
-			
-			
-			// Remove Data
-			$("body").on('click', '.removeData', function() {
-                var id = $(this).attr('data-id');
-                $('body').find('.users-remove-record-model').append('<input name="id" type="hidden" value="'+ id +'">');
+        $(document).ready(function(){
+             getDataSales()
+            setInterval(function(){
+                getDataSales()
+            }, 30000)
+        });
+
+        function getDataSales(){
+            $.ajax({
+                url: "{{ route('event.getDataSalesEvent') }}",
+                method: "GET",
+                success: function(data) {
+                    console.log(data);
+                    var htmls = [];
+                    $.each(data, function(index, value) {
+                    if(value) {
+                        var s = value.status;
+                        var status_payment = value.status_payment;
+                        var product_date = value.product_date;
+                        var is_tiket = value.is_ticket;
+
+                        var tiket = "";
+                        if(status_payment=="paid"){
+                            status_payment = '<span  class="btn btn-rounded btn-success">PAID</span>';
+                        }else{
+                            status_payment = '<span  class="btn btn-rounded btn-warning">UNPAID</span>';
+                        }
+                        if(is_tiket=="E-Ticket Terbit"){
+                            tiket = '<span  class="btn btn-rounded btn-success">E-Ticket Terbit</span>';
+                        }else{
+                            tiket = '<span  class="btn btn-rounded btn-danger">E-Ticket Belum Terbit</span>';
+                        }
+                        htmls.push('<tr>\
+                        <td>'+ value.customer +'</td>\
+                        <td>'+ value.number +'</td>\
+                        <td>'+ value.date +'</td>\
+                        <td style="text-align:center">'+ value.menu_product +'</td>\
+                        <td>'+ product_date +'</td>\
+                        <td align="right"><strong>Rp. '+ value.grand_total +'</strong></td>\
+                        <td>'+ status_payment +'</td>\
+                        <td>'+ tiket +'</td>\
+                        <td>\
+                            <a style="width:100px" href="/event/tiket/'+value.sales_event_id+'" class="btn btn-info" data-id="'+value.sales_event_id+'"><i class="glyphicon glyphicon-eye-open"></i> E-Ticket</a>\
+                        </td>\
+                        </tr>');
+                      }
+                     lastIndex = index;
+                    });
+                    $('#tbody').html(htmls);
+                    $("#submitUser").removeClass('desabled');                    
+                }
             });
-                
-            $('.deleteMatchRecord').on('click', function(){
-                var values = $(".users-remove-record-model").serializeArray();
-                var id = values[0].value;
-                firebase.database().ref('users/' + id).remove();
-                $('body').find('.users-remove-record-model').find( "input" ).remove();
-                $("#remove-modal").modal('hide');
-            });
-            $('.remove-data-from-delete-form').click(function() {
-                $('body').find('.users-remove-record-model').find( "input" ).remove();
-			});
-		//
+        }
     </script>
 @endsection
