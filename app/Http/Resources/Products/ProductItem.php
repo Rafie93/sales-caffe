@@ -5,6 +5,8 @@ namespace App\Http\Resources\Products;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Products\VariantItem as ItemVariant;
 use App\Models\Products\ProductPromo;
+use App\Models\Sales\SalesDetail;
+
 class ProductItem extends JsonResource
 {
     /**
@@ -47,6 +49,9 @@ class ProductItem extends JsonResource
          }
          $price_promo = $this->resource->price_sales - $price_promo;
       }
+
+       $sales = SalesDetail::where('product_id',$this->resource->id)->sum('qty');
+
        return  [
             'id'      => intval($this->resource->id),
             'name' => $this->resource->name,
@@ -70,7 +75,7 @@ class ProductItem extends JsonResource
             'weight' => doubleval($this->resource->weight),
             'cover' => $this->resource->cover(),
             'images' => $this->resource->images,
-            'sales' => intval($this->resource->sales->count()),
+            'sales' => intval($sales ? $sales : 0),
             'rating'  => intval($this->resource->sales->count()),
             'variant' => $variant,
             'pairing' => $product_pairing

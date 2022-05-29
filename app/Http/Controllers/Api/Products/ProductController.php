@@ -9,16 +9,22 @@ use App\Models\Products\Category;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Products\ProductList as ListResource;
 use App\Http\Resources\Products\ProductItem;
+use App\Models\Sales\SalesDetail;
 
 class ProductController extends Controller
 {
 
     public function popular(Request $request)
     {
-        $products = Product::orderBy('id','desc')
+        $sales = SalesDetail::select(DB::raw('product_id, sum(qty) as total_qty'))
+                            ->groupBy('product_id')
+                            ->orderBy('total_qty','desc')
+                            ->take(10)->get()->toArray();
+
+        $products = Product::whereIn('id',array_column($sales,'product_id'))
                         ->whereIn('product_type',[1,2])
                         ->where('status',1)
-                        ->paginate(4);
+                        ->paginate(10);
 
         return new ListResource($products);
     }
