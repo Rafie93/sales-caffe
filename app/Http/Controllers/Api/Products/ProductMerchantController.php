@@ -37,6 +37,7 @@ class ProductMerchantController extends Controller
             $available_display = "";
             foreach ($row->productAvailableStore($row->code) as $key => $store) {
                 $variant = [];
+                $pairing = [];
                 foreach ($store->variants as $vari){
                     $variant[] = array(
                          'id'      => intval($vari->id),
@@ -48,6 +49,7 @@ class ProductMerchantController extends Controller
                          'options' => json_decode($vari->options)
                     );
                 }
+                
                 $available[] = array(
                 'id'      => intval($store->id),
                 'name' => $store->name,
@@ -72,8 +74,8 @@ class ProductMerchantController extends Controller
                 'images' => $store->images,
                 'sales' => $store->sales->count(),
                 'rating'  => $store->sales->count(),
-                'variant' => $variant
-                    
+                'variant' => $variant,
+                'pairing' => $pairing
                );
                $available_display .= $store->store_name.' ';
             }
@@ -91,7 +93,6 @@ class ProductMerchantController extends Controller
                 'cover' => $row->coverProductMerchant($row->code),
                 'available_display' => $available_display,
                 'available' => $available,
-               
             );
         }
 
@@ -99,6 +100,8 @@ class ProductMerchantController extends Controller
             $available = [];
             foreach ($row->productFromStore($row->code,$row->name) as $key => $store) {
                 $variant = [];
+                $pairing = [];
+
                 foreach ($store->variants as $vari){
                     $variant[] = array(
                          'id'      => intval($vari->id),
@@ -134,7 +137,8 @@ class ProductMerchantController extends Controller
                     'images' => $store->images,
                     'sales' => $store->sales->count(),
                     'rating'  => $store->sales->count() ,
-                    'variant' => $variant    
+                    'variant' => $variant,
+                    'pairing' => $pairing  
                    );
             }
             
