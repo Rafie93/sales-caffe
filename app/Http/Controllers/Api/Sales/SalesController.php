@@ -15,6 +15,8 @@ use App\Http\Resources\Sales\SaleItem;
 use App\Http\Resources\Sales\SaleList;
 use App\Models\Stores\StoreTable;
 use App\Models\Carts\Cart;
+use App\Models\User;
+use App\Models\Products\Product;
 
 
 class SalesController extends Controller
@@ -23,6 +25,14 @@ class SalesController extends Controller
     {
         $data = Sale::orderBy('id','desc')
                     ->whereIn('status',[0,1,2,3])
+                    ->where('member_id',auth()->user()->id)->get();
+        return new SaleList($data);
+    }
+
+    public function ready_to_pick(Request $request)
+    {
+        $data = Sale::orderBy('id','desc')
+                    ->where('status',3)
                     ->where('member_id',auth()->user()->id)->get();
         return new SaleList($data);
     }
@@ -88,6 +98,122 @@ class SalesController extends Controller
                 'success'=>false,
                 'data'=>null
             ], 200);
+        }
+    }
+
+    public function update_status_to_accept(Request $request)
+    {
+        $number = $request->number;
+        $cashback = false;
+        $sale = Sale::where('number',$number)->whereIn('status',[2,3])->first();
+        if ($sale) {
+            $sale->status = 4;
+            $sale->save();
+            $detail = SalesDetail::where('sale_id',$sale->id)->get();
+            foreach ($detail as $key => $row) {
+                $product_id = $row->product_id;
+                $product = Product::where('id',$product_id)->first();
+                if ($product) {
+                    $point_cashback = $product->point_cashback;
+                    if ($point_cashback > 0) {
+                        $poinNow = auth()->user()->point;
+                        $poinFuture = $poinNow + $point_cashback;
+                        User::find(auth()->user()->id)->update([
+                            'poin' => $poinFuture
+                        ]);
+                        $cashback = true;
+                    }
+                }
+            }
+            return response()->json([
+                'success'=>true,
+                'cashback' => $cashback,
+                'data'=>new SaleItem($sale)
+            ], 200);
+        }else{
+            return response()->json([
+                'success'=>false,
+                'message' => "Sale not found",
+            ], 400);
+        }
+
+    }
+
+    public function getReviewProduct(Request $request)
+    {
+        $sales = Sale::select('sales_details.*')
+                    ->leftJoin('sales_details','sales_details.sale_id','sales.id')
+                    ->where('sales.type_sales',1)
+                    ->where('sales.member_id',auth()->user()->id)
+                    ->where('sales.status',4)
+                    ->whereNull('sales_details.rating')
+                    ->get();
+
+        $output = array();
+        foreach ($sales as $key => $item) {
+            $product = Product::where('id',$item->product_id)->first();
+            $output[] = array(
+                'id' => intval($item->id),
+                'product_id' => intval($item->product_id),
+                'product_name' => $product->name,
+                'product_image' => $product->cover(),
+                'rating' => 0,
+                'ulasan' => null,
+            );
+        }
+
+        return response()->json([
+            'success'=>true,
+            'data'=>$output
+        ], 200);
+    }
+    public function getReviewProductComplete(Request $request)
+    {
+        $sales = Sale::select('sales_details.*')
+                    ->leftJoin('sales_details','sales_details.sale_id','sales.id')
+                    ->where('sales.type_sales',1)
+                    ->where('sales.member_id',auth()->user()->id)
+                    ->where('sales.status',4)
+                    ->whereNotNull('sales_details.rating')
+                    ->get();
+
+        $output = array();
+        foreach ($sales as $key => $item) {
+            $product = Product::where('id',$item->product_id)->first();
+            $output[] = array(
+                'id' => intval($item->id),
+                'product_id' => intval($item->product_id),
+                'product_name' => $product->name,
+                'product_image' => $product->cover(),
+                'rating' => intval($item->rating),
+                'ulasan' => $item->ulasan,
+            );
+        }
+
+        return response()->json([
+            'success'=>true,
+            'data'=>$output
+        ], 200);
+    }
+
+    public function addReviewProduct(Request $request,$id)
+    {
+        $rating = $request->rating;
+        $ulasan = $request->ulasan;
+        $sale = SalesDetail::where('id',$id)->first();
+        if ($sale) {
+            $sale->rating = $rating;
+            $sale->ulasan = $ulasan;
+            $sale->save();
+            return response()->json([
+                'success'=>true,
+                'message'=>"Review berhasil ditambahkan"
+            ], 200);
+        }else{
+            return response()->json([
+                'success'=>false,
+                'message' => "Product Review not found",
+            ], 400);
         }
     }
 

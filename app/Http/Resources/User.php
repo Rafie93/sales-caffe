@@ -16,7 +16,7 @@ class User extends JsonResource
             'email'     => $user->email ?  $user->email :'',
             'phone'     => $user->phone,
             'gender' => $user->gender ? $user->gender : '',
-            'point'=>  $user->point ? $user->point : 0,
+            'point'=>  $user->poin ? intval($user->poin) : 0,
             'level'=>$user->level ? $user->level : 'regular',
             'image'  => '',
             'fcm_token' => $user->fcm_token ? $user->fcm_token : ''

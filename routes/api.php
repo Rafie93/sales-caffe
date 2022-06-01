@@ -89,11 +89,18 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::post('event/generate_ticket', [EventController::class,'generate_ticket']);
 
         Route::get('history', [SalesController::class,'history']);
+        Route::get('ready_to_pick', [SalesController::class,'ready_to_pick']);
+
         Route::get('history/complete', [SalesController::class,'history_complete']);
         Route::get('history/detail/{id}', [SalesController::class,'detail']);
         Route::get('history/event', [SalesController::class,'history_event']);
         Route::post('sales/store', [SalesController::class,'store']);
         Route::post('sales/update_payment', [SalesController::class,'update_payment']);
+        Route::post('sales/update_status_to_accept', [SalesController::class,'update_status_to_accept']);
+        Route::get('history/getReviewProduct', [SalesController::class,'getReviewProduct']);
+        Route::get('history/getReviewProductComplete', [SalesController::class,'getReviewProductComplete']);
+
+        Route::post('addReviewProduct/{id}', [SalesController::class,'addReviewProduct']);
 
         Route::get('cart/data', [CartController::class,'index']);
         Route::get('cart/detail/{id}', [CartController::class,'detail']);

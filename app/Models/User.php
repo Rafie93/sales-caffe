@@ -32,7 +32,7 @@ class User extends Authenticatable
         'image',
         'gender',
         'otp',
-        'point',
+        'poin',
         'otp_expired'
     ];
 
