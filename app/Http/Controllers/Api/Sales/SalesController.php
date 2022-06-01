@@ -149,6 +149,14 @@ class SalesController extends Controller
                     ->whereNull('sales_details.rating')
                     ->get();
 
+        $salesComplete = Sale::select('sales_details.*')
+                    ->leftJoin('sales_details','sales_details.sale_id','sales.id')
+                    ->where('sales.type_sales',1)
+                    ->where('sales.member_id',auth()->user()->id)
+                    ->where('sales.status',4)
+                    ->whereNotNull('sales_details.rating')
+                    ->get();
+
         $output = array();
         foreach ($sales as $key => $item) {
             $product = Product::where('id',$item->product_id)->first();
@@ -159,6 +167,20 @@ class SalesController extends Controller
                 'product_image' => $product->cover(),
                 'rating' => 0,
                 'ulasan' => null,
+                'status' => 'Waiting Review'
+            );
+        }
+        
+        foreach ($salesComplete as $key => $item) {
+            $product = Product::where('id',$item->product_id)->first();
+            $output[] = array(
+                'id' => intval($item->id),
+                'product_id' => intval($item->product_id),
+                'product_name' => $product->name,
+                'product_image' => $product->cover(),
+                'rating' => intval($item->rating),
+                'ulasan' => $item->ulasan,
+                'status' => 'Reviewed'
             );
         }
 

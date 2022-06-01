@@ -67,7 +67,7 @@
                             <tr>
                                 <td>{{$promos->firstItem() + $key }}</td>
                                 <td><a href="{{Route('product.detail',$row->product_id)}}"><strong> {{$row->product->name}} </strong></a> </td>
-                                <td>{{$row->start_date}} s/d {{$row->start_date}}</td>
+                                <td>{{$row->start_date}} s/d {{$row->end_date}}</td>
                                 <td>{{$row->type}}</td>
                                 <td align="center">{{$row->amount}}</td>
                                 <td>{{$row->is_status()}}</td>

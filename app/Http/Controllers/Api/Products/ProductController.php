@@ -31,9 +31,12 @@ class ProductController extends Controller
 
     public function promo(Request $request)
     {
-        $products = Product::orderBy('price_sales','asc')
-                        ->whereIn('product_type',[1,2])
-                        ->where('status',1)
+        $products = Product::select('products.*')
+                        ->join('product_promo','product_promo.product_id','=','products.id')
+                        ->whereIn('products.product_type',[1,2])
+                        ->where('product_promo.start_date','<=',date('Y-m-d'))
+                        ->where('product_promo.end_date','>=',date('Y-m-d'))
+                        ->where('products.status',1)
                         ->paginate(4);
 
         return new ListResource($products);

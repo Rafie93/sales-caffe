@@ -43,6 +43,19 @@
                                         @enderror
                                     </div>
 
+                                    <div class="form-group @error('type') has-error @enderror">
+                                        <label class="form-label">Jenis Voucher *</label>
+                                        <select name="type" class="form-control">
+                                            <option value="Diskon">Diskon</option>
+                                            <option value="Cashback">Cashback</option>
+                                        </select>
+                                        @error('type')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
                                     <div class="form-group @error('start_date') has-error @enderror">
                                         <label class="form-label">Tanggal Mulai*</label>
                                         <input type="date" class="form-control" data-date="" data-date-format="DD-MM-YYYY" 
@@ -92,6 +105,17 @@
                                         <input type="number" class="form-control"
                                         placeholder="" name="minimum_shopp" required value="{{old('minimum_shopp') ? old('minimum_shopp') : 0}}">
                                         @error('minimum_shopp')
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group @error('maximum_amount') has-error @enderror">
+                                        <label class="form-label">Maksimal Nominal (Rp) </label>
+                                        <input type="number" class="form-control"
+                                        placeholder="kosongkan tanpa maksimal" name="maximum_amount" value="{{old('maximum_amount') ? old('maximum_amount') : ''}}">
+                                        @error('maximum_amount')
                                                 <span class="help-block" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

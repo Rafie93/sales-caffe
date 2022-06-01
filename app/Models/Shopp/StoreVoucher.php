@@ -10,6 +10,7 @@ class StoreVoucher extends Model
     use HasFactory;
     protected $table = "store_voucher";
     protected $fillable = [
+        "type",
         "store_id",
         "code",
         "name",

@@ -52,8 +52,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Kode / Nama Voucher</th>
+                                <th>Jenis</th>
                                 <th>Type</th>
                                 <th>Nominal</th>
+                                <th>Minimum & Maksimal</th>
                                 <th>Expired</th>
                                 <th>Status</th>
                                 <th>Digunakan</th>
@@ -68,8 +70,12 @@
                             <tr>
                                 <td>{{$vouchers->firstItem() + $key }}</td>
                                 <td><strong> {{$row->code}} </strong><br> {{$row->name}}  </td>
+                                <td>{{$row->type}}</td>
                                 <td>{{$row->amount_type}}</td>
-                                <td align="right">{{$row->amount}}</td>
+                                <td align="right">{{$row->amount}} {{$row->amount_type!="nominal" ? ' %' : '' }}</td>
+                                <td align="right">{{$row->minimum_shopp}}<br>
+                                {{$row->maximum_amount ? $row->maximum_amount : 'Tanpa Batas'}}</td>
+                                </td>
                                 <td align="center">{{$row->start_date." s/d ".$row->expired_at}}</td>
                                 <td align="center">{{$row->is_status()}}</td>
                                 <td align="center">

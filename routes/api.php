@@ -74,6 +74,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
 
 
         Route::get('voucher', [VoucherController::class,'index']);
+        Route::get('voucher/detail/{id}', [VoucherController::class,'detail']);
+
         Route::get('stores', [StoreController::class,'index']);
         Route::get('seat/{storeid}', [SeatController::class,'index']);
         Route::get('tax/{storeid}', [TaxController::class,'index']);

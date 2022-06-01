@@ -23,6 +23,7 @@ class VoucherItem extends JsonResource
             'id'      => $this->resource->id,
             'store_id' => $this->resource->store_id,
             'store_name' => $storeName,
+            'type' => $this->resource->type,
             "code" => $this->resource->code,
             "name" => $this->resource->name,
             "amount" => $this->resource->amount,
