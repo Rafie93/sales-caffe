@@ -85,7 +85,7 @@ class OrderController extends Controller
            $output[] = array(
                 'id' => $row->id,
                 'number' => $row->number,
-                'customer' => $row->member->fullname,
+                'customer' => $row->customer_name,
                 'date' => $row->date,
                 'menu_product' => $row->detail->count(),
                 'grand_total' => number_format($row->grand_total),
