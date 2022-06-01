@@ -53,7 +53,8 @@ class Sale extends Model
         "customer_email",
         "payment_no",
         "payment_expired",
-        "resi_no"
+        "resi_no",
+        "voucher_type"
     ];
 
     public const PAID = 'paid';

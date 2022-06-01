@@ -17,6 +17,7 @@ use App\Models\Stores\StoreTable;
 use App\Models\Carts\Cart;
 use App\Models\User;
 use App\Models\Products\Product;
+use App\Models\Shopp\StoreVoucher;
 
 
 class SalesController extends Controller
@@ -125,6 +126,17 @@ class SalesController extends Controller
                     }
                 }
             }
+
+            if ($sale->voucher_type=="Cashback") {
+               $cashback = true;
+               $nilai_cashback = $sale->discount_total;
+               $poinNow = auth()->user()->point;
+               $poinFuture = $poinNow + $nilai_cashback;
+                User::find(auth()->user()->id)->update([
+                    'poin' => $poinFuture
+                ]);
+            }
+
             return response()->json([
                 'success'=>true,
                 'cashback' => $cashback,
@@ -321,6 +333,15 @@ class SalesController extends Controller
         if($request->poin_dikurangkan!=0){
             $yeePoint = true;
             $request->merge(['point_total' => $request->poin_dikurangkan]);
+        }
+        if ($request->voucher_code) {
+            $voucher_type = null;
+            $vouc = StoreVoucher::where('code',$request->voucher_code)->first();
+            if ($vouc) {
+               $voucher_type = $vouc->type;
+            }
+            $request->merge(['voucher_type' => $voucher_type]);
+
         }
 
         try

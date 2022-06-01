@@ -106,6 +106,7 @@ class SaleItem extends JsonResource
             'seat' =>  strval($this->resource->seat),
             'status' => strval($this->resource->status),
             'notes' => strval($this->resource->notes),
+            'voucher_type' => strval($this->resource->voucher_type),
             'created_at' => strval($this->resource->created_at->format('D, d M Y')),
             'total_item' => intval($this->resource->detail->count()),
             'item_string'=>$item_string,
