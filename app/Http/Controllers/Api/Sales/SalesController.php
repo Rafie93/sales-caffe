@@ -351,10 +351,11 @@ class SalesController extends Controller
                 $saleId = $sale->id;
                 if($yeePoint){
                     $uId = auth()->user()->id;
-                    $user = User::find($uId)->first();
-                    $user->update([
-                        'poin' => $user->point - $request->poin_dikurangkan
-                    ]);
+                    $poinNow = auth()->user()->point;
+                    $poinFuture = $poinNow - $request->poin_dikurangkan;
+                     User::find($uId)->update([
+                         'poin' => $poinFuture
+                     ]);
                 }
                 $productcss = $request->products;
                 if($productcss && $request->type_sales == 1){
