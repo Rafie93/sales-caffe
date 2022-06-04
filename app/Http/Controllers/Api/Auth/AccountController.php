@@ -33,6 +33,17 @@ class AccountController extends Controller
         ]);
         return response()->json(['success'=>true,'message'=>'Profil Berhasil di Perbaharui'], 200);
     }
+    public function refreshTokenFcm(Request $request)
+    {
+        $user = auth()->user();
+        if ($request->fcm_token!="" && $request->fcm_token != $user->fcm_token) {
+            $user->update([
+                "fcm_token" => $request->fcm_token,
+            ]);
+        }
+        return response()->json(['success'=>true,'message'=>'OK'], 200);
+
+    }
    public function updatepassword(Request $request)
     {
         $id = auth()->user()->id;

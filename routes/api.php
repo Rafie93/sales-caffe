@@ -60,6 +60,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'as' => 'api.'], function()
         Route::post('address/store', [UserAddressController::class,'store']);
         Route::get('address', [UserAddressController::class,'index']);
         Route::post('address/update/{id}', [UserAddressController::class,'update']);
+        Route::post('account/token_fcm', [AccountController::class,'refreshTokenFcm']);
 
         Route::get('category', [CategoryController::class,'index']);
         Route::get('product/all', [ProductMerchantController::class,'index']);
