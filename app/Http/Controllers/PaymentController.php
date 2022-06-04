@@ -129,6 +129,8 @@ class PaymentController extends Controller
 						$title = "Transaction ".$sale->number." (PAID)";
 						$body  = $title." ".$sale->member->fullname." Baru Saja Melakukan Pembayaran via ".$sale->payment_method." Sebesar Rp ".number_format($order->grand_total);
 						sendFirebaseToAdminStore($sale->store_id,$title,$body);
+						sendFirebasePerUser($sale->member_id,$title,"Pembayaran Sukses Senilai Rp. ".number_format($order->grand_total));
+
 						$notifFirebaseData = [
 							"title" => $title,
 							"body" => $body,
