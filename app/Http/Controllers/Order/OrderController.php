@@ -67,7 +67,18 @@ class OrderController extends Controller
         ];
         $updates = ['orders/store-'.$sale->store_id.'/'.$sale->firebase_id => $postData];
         $firebase->getReference()->update($updates);
-
+        if ($status==3) {
+            $title = "";
+            $body ="";
+            if ($sale->service =="delivery") {
+                $title = "Pesanan sedang dikirim";
+                $body = "Harap konfirmasi kedatangan jika pesanan sudah diterima";
+            }else{
+                $title = "Pesanan Sudah Siap";
+                $body = "Silahkan Ambil Pesanan anda, dan konfirmasi pesanan diterima. Pastikan lakukan review produk kami"; 
+            }
+            sendFirebasePerUser($sale->member_id,$title,$body);
+        }
 
         return redirect()->route('order')->with('message','Status Pesanan di Perbaharui');
     }
