@@ -378,7 +378,7 @@ class SalesController extends Controller
                         $detail->price_variant = $price_variant;
                         $detail->qty = $qty;
                         $detail->price = $price;
-                        $detail->subtotal = (($price-$price_promo) + $price_variant) * $qty;
+                        $detail->subtotal = ($price + $price_variant) * $qty;
                         $detail->notes = $notes;
                         $detail->save();
 
