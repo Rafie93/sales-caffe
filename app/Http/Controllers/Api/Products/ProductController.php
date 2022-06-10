@@ -37,7 +37,7 @@ class ProductController extends Controller
                         ->where('product_promo.start_date','<=',date('Y-m-d'))
                         ->where('product_promo.end_date','>=',date('Y-m-d'))
                         ->where('products.status',1)
-                        ->paginate(4);
+                        ->paginate(8);
 
         return new ListResource($products);
     }
@@ -47,8 +47,12 @@ class ProductController extends Controller
         $products = Product::orderBy('id','desc')
                         ->where('product_type',1)
                         ->where('status',1)
-                        ->where('store_id',$storeId)
-                        ->paginate(20);
+                        ->when($storeId,function($query) use ($storeId){
+                            if ($storeId!=0) {
+                                $query->where('store_id','=',$storeId);
+                            }
+                        })
+                        ->get();
 
         return new ListResource($products);
     }
