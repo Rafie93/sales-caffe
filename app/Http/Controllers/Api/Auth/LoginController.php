@@ -58,9 +58,11 @@ class LoginController extends Controller
         if ($user->count() != 1) {
            return response()->json(['success'=>false,'message'=>'Akun tidak ditemukan, silahkan daftar terlebih dulu'], 400);
         }
-        $otp = generateOTP();
+        // $otp = generateOTP();
+        $otp = 5432;
+        
         $currentDateTime = Carbon::now();
-        $otpExpired = Carbon::now()->addMinute(2);
+        $otpExpired = Carbon::now()->addMinute(5);
 
         $user = $user->first();
         $user->update([
